@@ -1,0 +1,6 @@
+export const SET_USERS = "SET_USERS"
+export const ADD_USER = "ADD_USER"
+export const DELETE_USER = "DELETE_USER"
+export const UPDATE_USER = "UPDATE_USER"
+export const SET_MODAL_STATUS = "SET_MODAL_STATUS"
+export const SET_USER_ID_FOR_UPDATE = "SET_USER_ID_FOR_UPDATE"
