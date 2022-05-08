@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import {useEffect, useReducer} from 'react'
+import UsersReducer from './reducers/users'
+import UsersContext from './contexts/users'
+import {setUsers} from './actions/users'
+import Header from './components/layouts/Header'
+import Footer from './components/layouts/Footer'
+import Users from './components/users/Index'
+import localS from './modules/LocalStorage'
 
-function App() {
+export default () => {
+  const [state, dispatch] = useReducer(UsersReducer, {
+    users: [],
+    modalStatus: false,
+    userIdForUpdate: null
+  })
+
+  useEffect(() => dispatch(setUsers(localS.all())), [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <>
+      <Header />
 
-export default App;
+      <main style={{minHeight: 'calc(100vh - 150px)'}}>
+        <UsersContext.Provider value={{state, dispatch}}>
+          <Users />  
+        </UsersContext.Provider>
+      </main>
+
+      <Footer />
+    </>
+  )
+}
