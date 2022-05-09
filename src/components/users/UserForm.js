@@ -50,7 +50,7 @@ const messages = {
 /**
  * This component is for managing the user registration form or editing
  */
-export default (props) => {
+export default () => {
     const [data, setData] = useState(initialData)
 
     const [errors, setErrors] = useState({})
@@ -88,7 +88,7 @@ export default (props) => {
      * This function is for recording or editing user information.
      * @param e This parameter contains the form element.
      */
-    const submitHandler = async (e) => {
+    const submitHandler = async e => {
         try {
             e.preventDefault()
             await validation(data, rules, messages)
@@ -101,7 +101,6 @@ export default (props) => {
                 dispatch(addUser({...data, id}))
             }
             
-            e.target.reset()
             cancelHandler()
             window.scrollTo({top: 0, behavior: 'smooth'})
             swal.toast('success', SUCCESSFUL_OPERATION)
