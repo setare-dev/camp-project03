@@ -36,6 +36,14 @@ export default new class {
     }
 
     /**
+     * This method is responsible for returning all data from the local storage.
+     * @returns The output of the array is empty or all records in local storage.
+     */
+     allWithDelay (delay = 4000) {
+        return new Promise((resolve) => setTimeout(() => resolve(this.all()), delay))
+    }
+
+    /**
      * This method is responsible for recording a record in local storage.
      * @param obj Contains a object of data to record in local storage.
      * @returns Generated user id output.
