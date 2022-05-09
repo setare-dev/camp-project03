@@ -1,7 +1,5 @@
-export default ({cols = 2, children}) => {
-    return (
-        <div className={`grid md:grid-cols-${cols} gap-x-4`}>
-            {children}
-        </div>
-    )
-}
+export default ({cols = 2, children}) => (
+    <div className={`grid md:grid-cols-${cols} gap-x-4`}>
+        {children}
+    </div>
+)
