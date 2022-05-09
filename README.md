@@ -1,5 +1,9 @@
 # Getting Started with Create React App
 
+<p align="center">
+  <img src="./public/analysis.png" style="width: 100%">
+</p>
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
