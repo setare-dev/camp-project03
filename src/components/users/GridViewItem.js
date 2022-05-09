@@ -32,6 +32,7 @@ export default ({id, name, family, day, month, year, gender, email, isAdmin, cre
     const updateHandler = () => {
         dispatch(setUserIdForUpdate(id))
         dispatch(setModalStatus(true))
+        document.querySelector('body').classList.add('overflow-hidden')
     }
 
     return (
