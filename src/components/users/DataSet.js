@@ -1,5 +1,5 @@
 import {useContext} from 'react'
-import UsersContext from '../../contexts/users'
+import UsersContext from '../../states/contexts/users'
 import DataSetItem from './DataSetItem'
 import {EMPTY_DATA} from './../../constants/responses'
 

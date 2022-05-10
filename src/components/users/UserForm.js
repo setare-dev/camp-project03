@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from 'react'
-import UsersContext from '../../contexts/users'
-import {addUser, updateUser, setModalStatus, setUserIdForUpdate} from '../../actions/users'
+import UsersContext from '../../states/contexts/users'
+import {addUser, updateUser, setModalStatus, setUserIdForUpdate} from '../../states/actions/users'
 import {validation} from '../../modules/HelperFunctions'
 import {FORM_ERRORS, SUCCESSFUL_OPERATION} from './../../constants/responses'
 import InputElement from './../elements/Input'

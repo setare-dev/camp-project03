@@ -1,6 +1,6 @@
 import {useContext, useState} from 'react'
-import UsersContext from './../../contexts/users'
-import {setModalStatus} from './../../actions/users'
+import UsersContext from './../../states/contexts/users'
+import {setModalStatus} from './../../states/actions/users'
 import UserForm from './UserForm'
 import GridView from './GridView'
 import DataSet from './DataSet'
