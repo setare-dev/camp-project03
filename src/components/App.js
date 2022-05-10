@@ -1,9 +1,9 @@
 import {useState} from 'react'
-import UsersProvider from './states/providers/users'
-import Header from './components/layouts/Header'
-import Footer from './components/layouts/Footer'
-import FullElementLoading from './components/loadings/FullElement'
-import Users from './components/users/Index'
+import UsersProvider from './../states/providers/users'
+import Header from './layouts/Header'
+import Footer from './layouts/Footer'
+import FullElementLoading from './loadings/FullElement'
+import Users from './users/Index'
 
 export default () => {
   const [isLoading, setIsLoading] = useState(false)
