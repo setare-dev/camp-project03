@@ -1,7 +1,7 @@
 import {useContext} from 'react'
 import UsersContext from '../../states/contexts/users'
-import GridViewItem from './GridViewItem'
-import TableElement from './../elements/Table'
+import GridViewItem from './GridViewItemUsers'
+import TableElement from '../elements/TableElement'
 import TableHead from './../table/TableHead'
 import TableFooter from './../table/TableFooter'
 
@@ -13,9 +13,9 @@ const GridViewUsers = () => {
 
     return (
         <TableElement>
-            <TableHead titles={['نام', 'متولد', 'جنسیت', 'ایمیل', 'کاربری', 'تاریخ عضویت', 'عملیات']} />
+            <TableHead titles={['نام', 'متولد', 'جنسیت', 'ایمیل', 'کاربری', 'تاریخ عضویت', 'عملیات']}/>
             <tbody>{state.users.map(user => <GridViewItem key={user.id} {...user} />)}</tbody>
-            <TableFooter data={state.users} colSpan="7" />
+            <TableFooter data={state.users} colSpan="7"/>
         </TableElement>
     )
 }
