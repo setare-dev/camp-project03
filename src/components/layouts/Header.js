@@ -1,6 +1,6 @@
 import DarkMode  from './DarkMode'
 
-export default () => (
+const HeaderLayout = () => (
     <div className="bg-gray-100 dark:bg-gray-700 py-4 px-2 md:px-0 select-none">
         <div className="container mx-auto flex justify-between items-center">
             <div className="flex text-xl font-semibold text-gray-500 dark:text-white">
@@ -11,3 +11,5 @@ export default () => (
         </div>
     </div>
 )
+
+export default HeaderLayout

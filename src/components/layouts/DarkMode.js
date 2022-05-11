@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 /**
  * This component is for dark mode management.
  */
-export default () => {
+const DarkMode = () => {
     /**
      * The values of this state: light - dark - osPreference.
      */
@@ -44,3 +44,5 @@ export default () => {
         </>
     )
 }
+
+export default DarkMode

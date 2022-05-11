@@ -2,16 +2,16 @@ import {useContext} from 'react'
 import {timestampToPersianDate} from '../../modules/HelperFunctions'
 import UsersContext from '../../states/contexts/users'
 import {deleteUser, setUserIdForUpdate, setModalStatus} from '../../states/actions/users'
-import {SUCCESSFUL_REMOVAL} from './../../constants/responses'
-import TableRowElement from './../elements/TableRow'
-import TableDataElement from './../elements/TableData'
+import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
+import TableRowElement from '../elements/TableRow'
+import TableDataElement from '../elements/TableData'
 import localS from '../../modules/LocalStorage'
 import swal from '../../modules/SwalAlert'
 
 /**
  * The task of this component is to create a record of users in the form of a data gridview.
  */
-export default ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
+const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
     const {dispatch} = useContext(UsersContext)
 
     /**
@@ -27,7 +27,7 @@ export default ({id, name, family, day, month, year, gender, email, isAdmin, cre
     }
 
     /**
-     * Perform user editing operations
+     * Perform user editing operations.
      */
     const updateHandler = () => {
         dispatch(setUserIdForUpdate(id))
@@ -39,9 +39,9 @@ export default ({id, name, family, day, month, year, gender, email, isAdmin, cre
         <TableRowElement>
             <TableDataElement>{name} {family}</TableDataElement>
             <TableDataElement>{year}/{month}/{day}</TableDataElement>
-            <TableDataElement>{gender == '0' ? 'مرد' : 'زن'}</TableDataElement>
+            <TableDataElement>{gender === '0' ? 'مرد' : 'زن'}</TableDataElement>
             <TableDataElement>{email}</TableDataElement>
-            <TableDataElement>{isAdmin == '0' ? 'معمولی' : 'مدیر'}</TableDataElement>
+            <TableDataElement>{isAdmin === '0' ? 'معمولی' : 'مدیر'}</TableDataElement>
             <TableDataElement>{timestampToPersianDate(createdAt)}</TableDataElement>
             <TableDataElement>
                 <button onClick={updateHandler} className="bg-green-700 text-white p-1 ml-2 text-sm rounded-md show">ویرایش</button>
@@ -50,3 +50,5 @@ export default ({id, name, family, day, month, year, gender, email, isAdmin, cre
         </TableRowElement>
     )
 }
+
+export default GridViewItemUsers

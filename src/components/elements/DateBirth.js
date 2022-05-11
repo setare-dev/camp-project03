@@ -1,4 +1,4 @@
-export default ({label, day, month, year, errors, inputHandler}) => (
+const DataBirthElement = ({label, day, month, year, errors, inputHandler}) => (
     <div className="mb-4">
         <label className="text-gray-500 dark:text-gray-100">{label}</label>
 
@@ -13,3 +13,5 @@ export default ({label, day, month, year, errors, inputHandler}) => (
         <small className="text-red-500">{'day' in errors || 'month' in errors || 'year' in errors ? 'فرمت نامعتبر است' : ''}</small>
     </div>
 )
+
+export default DataBirthElement

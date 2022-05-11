@@ -3,7 +3,7 @@ import swal from 'sweetalert2'
 /**
  * This class is responsible for presenting the properties of sweet alert
  */
-export default new class {
+class SweetAlert {
     /**
      * This method displays a message in the form of toast.
      * @param type This parameter contains the type of error that is either success or error.
@@ -11,9 +11,9 @@ export default new class {
      * @param timer This parameter is the display time of the message in milliseconds.
      * @param position This parameter contains the message position.
      */
-    toast(type, title, timer = 3000, position = 'bottom-end')
-    {
-        swal.mixin({
+    toast (type, title, timer = 3000, position = 'bottom-end') {
+        swal.fire({
+            title,
             position,
             timer,
             toast: true,
@@ -21,15 +21,13 @@ export default new class {
             timerProgressBar: true,
             iconColor: '#fff',
             color: '#fff',
-            background: type == 'success' ? 'rgb(21 128 61)' : 'rgb(185 28 28)',
+            icon: type === 'success' ? 'success' : 'error',
+            background: type === 'success' ? 'rgb(21 128 61)' : 'rgb(185 28 28)',
             showCloseButton: true,
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', swal.stopTimer)
                 toast.addEventListener('mouseleave', swal.resumeTimer)
             }
-        }).fire({
-            icon: type == 'success' ? 'success' : 'error',
-            title,
         })
     }
 
@@ -40,8 +38,7 @@ export default new class {
      * @param cancelButtonText This parameter contains the word cancel.
      * @returns The output of this method is promise true or promise false.
      */
-    question(html = 'آیا اطمینان دارید؟', confirmButtonText = 'بلی', cancelButtonText = 'خیر')
-    {
+    question (html = 'آیا اطمینان دارید؟', confirmButtonText = 'بلی', cancelButtonText = 'خیر') {
         return new Promise((resolve) => {
             return swal.fire({
                 icon: 'question',
@@ -57,3 +54,5 @@ export default new class {
         })
     }
 }
+
+export default new SweetAlert()

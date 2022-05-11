@@ -1,20 +1,20 @@
 import {useContext, useState} from 'react'
-import UsersContext from './../../states/contexts/users'
-import {setModalStatus} from './../../states/actions/users'
-import UserForm from './UserForm'
-import GridView from './GridView'
-import DataSet from './DataSet'
+import UsersContext from '../../states/contexts/users'
+import {setModalStatus} from '../../states/actions/users'
+import ModalFormUsers from './ModalForm'
+import GridViewUsers from './GridView'
+import DataSetUsers from './DataSet'
 
 /**
  * This is the parent component for the users page.
  */
-export default () => {
+const IndexUsers = () => {
     const {dispatch} = useContext(UsersContext)
 
     /**
      * true: GridView, false: DataSet
      */
-    const [viewType, setViewType] = useState(localStorage.viewType ? localStorage.viewType == 'false' ? false : true : true)
+    const [viewType, setViewType] = useState(localStorage.viewType ? localStorage.viewType === 'false' ? false : true : true)
 
     /**
      * This function is to change the display mode of information and save this mode in local storage.
@@ -44,8 +44,10 @@ export default () => {
                 <button onClick={showModalForCreateForm} className="bg-indigo-700 text-white px-3 py-2 rounded-lg">کاربر جدید</button>
             </div>
 
-            {viewType ? <GridView /> : <DataSet />}
-            <UserForm />
+            {viewType ? <GridViewUsers /> : <DataSetUsers />}
+            <ModalFormUsers />
         </div>
     )
 }
+
+export default IndexUsers

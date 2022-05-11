@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "./../node_modules/vazir-font/dist/font-face.css";
+@import "~vazir-font/dist/font-face.css";
 
 @layer base {
   html {

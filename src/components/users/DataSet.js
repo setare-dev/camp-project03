@@ -1,13 +1,13 @@
 import {useContext} from 'react'
-import UsersContext from '../../states/contexts/users'
+import usersContext from '../../states/contexts/users'
 import DataSetItem from './DataSetItem'
-import {EMPTY_DATA} from './../../constants/responses'
+import {EMPTY_DATA} from '../../constants/responses'
 
 /**
- * The task of this component is to create a data set from the list of users
+ * The task of this component is to create a data set from the list of users.
  */
-export default () => {
-    const {state} = useContext(UsersContext)
+const DataSetUsers = () => {
+    const {state} = useContext(usersContext)
 
     return (
         <div className="my-4">
@@ -18,3 +18,5 @@ export default () => {
         </div>
     )
 }
+
+export default DataSetUsers

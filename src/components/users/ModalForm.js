@@ -2,11 +2,11 @@ import {useContext, useEffect, useState} from 'react'
 import UsersContext from '../../states/contexts/users'
 import {addUser, updateUser, setModalStatus, setUserIdForUpdate} from '../../states/actions/users'
 import {validation} from '../../modules/HelperFunctions'
-import {FORM_ERRORS, SUCCESSFUL_OPERATION} from './../../constants/responses'
-import InputElement from './../elements/Input'
-import MultiColumnElement from './../elements/MultiColumn'
-import SelectElement from './../elements/Select'
-import DateBirthElement from './../elements/DateBirth'
+import {FORM_ERRORS, SUCCESSFUL_OPERATION} from '../../constants/responses'
+import InputElement from '../elements/Input'
+import MultiColumnElement from '../elements/MultiColumn'
+import SelectElement from '../elements/Select'
+import DateBirthElement from '../elements/DateBirth'
 import localS from '../../modules/LocalStorage'
 import swal from '../../modules/SwalAlert'
 
@@ -48,9 +48,9 @@ const messages = {
 }
 
 /**
- * This component is for managing the user registration form or editing
+ * This component is for managing the user registration form or editing.
  */
-export default () => {
+const ModalFormUsers = () => {
     const [data, setData] = useState(initialData)
 
     const [errors, setErrors] = useState({})
@@ -62,13 +62,13 @@ export default () => {
      */
     useEffect(() => {
         if (state.userIdForUpdate) {
-            setData(state.users.filter(user => user.id == state.userIdForUpdate)[0])
+            setData(state.users.filter(user => user.id === state.userIdForUpdate)[0])
         }
-    }, [state.userIdForUpdate])
+    }, [state.users, state.userIdForUpdate])
 
     /**
      * This function is to receive data from inputs and register it in the object.
-     * @param key Contains the key to assign value in it
+     * @param key Contains the key to assign value in it.
      * @param value Contains a value to record in a variable.
      */
     const inputHandler = (key, value) => setData({...data, [key]: value})
@@ -147,3 +147,5 @@ export default () => {
         </div>
     )
 }
+
+export default ModalFormUsers

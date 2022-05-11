@@ -1,7 +1,7 @@
 /**
  * This class is responsible for managing the removal and recording of information in local storage.
  */
-export default new class {
+class LocalStorage {
 
     /**
      * This property specifies the key name of the data in the local storage.
@@ -22,7 +22,7 @@ export default new class {
      * @returns The output contains an object from a record.
      */
     select (id) {
-        return JSON.parse(localStorage[this.key])?.filter(item => item.id == id)
+        return JSON.parse(localStorage[this.key])?.filter(item => item.id === id)
     }
     
 
@@ -72,7 +72,7 @@ export default new class {
     delete (id) {
         if (this.isDataInLocalStorage()) {
             let data = JSON.parse(localStorage[this.key])
-            data = data.filter(item => item.id != id)
+            data = data.filter(item => item.id !== id)
             localStorage[this.key] = JSON.stringify(data)
         }
     }
@@ -94,10 +94,11 @@ export default new class {
         if (this.isDataInLocalStorage()) {
             let {id} = dataObj
             let data = JSON.parse(localStorage[this.key])
-            let index = data.findIndex(user => user.id == id)
+            let index = data.findIndex(user => user.id === id)
             data[index] = dataObj
             localStorage[this.key] = JSON.stringify(data)
         }
     }
-
 }
+
+export default new LocalStorage()

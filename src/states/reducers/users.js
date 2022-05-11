@@ -3,7 +3,7 @@ import {SET_USERS, ADD_USER, DELETE_USER, UPDATE_USER, SET_MODAL_STATUS, SET_USE
 /**
  * This reducer is for operation on the state user, whose actions can be seen below.
  */
-export default (prevState, action) => {
+const UsersReducer = (prevState, action) => {
     switch (action.type) {
         case SET_USERS: return setUsers(prevState, action)
         case ADD_USER: return addUser(prevState, action)
@@ -41,7 +41,7 @@ const addUser = (prevState, action) => {
  */
 const deleteUser = (prevState, action) => {
     let {id} = action.payload
-    return {...prevState, users: [...prevState.users.filter(user => user.id != id)]}
+    return {...prevState, users: [...prevState.users.filter(user => user.id !== id)]}
 }
 
 /**
@@ -52,7 +52,7 @@ const deleteUser = (prevState, action) => {
  */
 const updateUser = (prevState, action) => {
     let {id} = action.payload.user
-    let index = prevState.users.findIndex(user => user.id == id)
+    let index = prevState.users.findIndex(user => user.id === id)
     prevState.users[index] = action.payload.user
     return {...prevState, users: prevState.users}
 }
@@ -72,3 +72,5 @@ const setModalStatus = (prevState, action) => ({...prevState, modalStatus: actio
  * @returns Return the new state after editing the user.
  */
 const setUserIdForUpdate = (prevState, action) => ({...prevState, userIdForUpdate: action.payload.id})
+
+export default UsersReducer

@@ -1,12 +1,12 @@
 import {useContext} from 'react'
 import UsersContext from '../../states/contexts/users'
 import GridViewItem from './GridViewItem'
-import {EMPTY_DATA} from './../../constants/responses'
+import {EMPTY_DATA} from '../../constants/responses'
 
 /**
- * The task of this component is to create a data gridview from the list of users
+ * The task of this component is to create a data gridview from the list of users.
  */
-export default () => {
+const GridViewUsers = () => {
     const {state} = useContext(UsersContext)
 
     return (
@@ -33,3 +33,5 @@ export default () => {
         </div>
     )
 }
+
+export default GridViewUsers

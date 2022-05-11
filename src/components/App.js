@@ -1,25 +1,30 @@
 import {useState} from 'react'
 import UsersProvider from './../states/providers/users'
-import Header from './layouts/Header'
-import Footer from './layouts/Footer'
+import HeaderLayout from './layouts/Header'
+import FooterLayout from './layouts/Footer'
 import FullElementLoading from './loadings/FullElement'
-import Users from './users/Index'
+import IndexUsers from './users/Index'
 
-export default () => {
+/**
+ * The parent component that is supposed to display the user component along with the template components.
+ */
+const App = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   return (
     <>
-      <Header />
+      <HeaderLayout />
 
       <main className="relative" style={{minHeight: 'calc(100vh - 150px)'}}>
         <UsersProvider setIsLoading={setIsLoading}>
-          <Users />
+          <IndexUsers />
           {isLoading ? <FullElementLoading /> : null}
         </UsersProvider>
       </main>
 
-      <Footer />
+      <FooterLayout />
     </>
   )
 }
+
+export default App

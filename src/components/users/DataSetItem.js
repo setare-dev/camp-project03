@@ -1,8 +1,8 @@
 import {useContext} from 'react'
 import {timestampToPersianDate} from '../../modules/HelperFunctions'
-import UsersContext from '../../states/contexts/users'
+import usersContext from '../../states/contexts/users'
 import {deleteUser, setUserIdForUpdate, setModalStatus} from '../../states/actions/users'
-import {SUCCESSFUL_REMOVAL} from './../../constants/responses'
+import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
 import DataSetRowElement from '../elements/DataSetRow'
 import localS from '../../modules/LocalStorage'
 import swal from '../../modules/SwalAlert'
@@ -10,8 +10,8 @@ import swal from '../../modules/SwalAlert'
 /**
  * The task of this component is to create a record of users in the form of a data set.
  */
-export default ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
-    const {dispatch} = useContext(UsersContext)
+const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
+    const {dispatch} = useContext(usersContext)
 
     /**
      * Perform user delete operations.
@@ -26,7 +26,7 @@ export default ({id, name, family, day, month, year, gender, email, isAdmin, cre
     }
 
     /**
-     * Perform user editing operations
+     * Perform user editing operations.
      */
     const updateHandler = () => {
         dispatch(setUserIdForUpdate(id))
@@ -36,7 +36,7 @@ export default ({id, name, family, day, month, year, gender, email, isAdmin, cre
     return (
         <div className="bg-gray-200 dark:bg-gray-900 p-3 rounded-lg space-y-3">
             <DataSetRowElement className="text-lg font-semibold">
-                <div className="ml-1">{gender == '0' ? 'آقای' : 'خانم'}</div>
+                <div className="ml-1">{gender === '0' ? 'آقای' : 'خانم'}</div>
                 <div className="ml-1">{name}</div>
                 <div>{family}</div>
             </DataSetRowElement>
@@ -48,7 +48,7 @@ export default ({id, name, family, day, month, year, gender, email, isAdmin, cre
 
             <DataSetRowElement>
                 <div className="ml-1 opacity-60">نوع کاربری</div>
-                <div>{isAdmin == 0 ? 'معمولی' : 'مدیر'}</div>
+                <div>{isAdmin === 0 ? 'معمولی' : 'مدیر'}</div>
             </DataSetRowElement>
 
             <DataSetRowElement>
@@ -67,3 +67,5 @@ export default ({id, name, family, day, month, year, gender, email, isAdmin, cre
         </div>
     )
 }
+
+export default DataSetItemUsers
