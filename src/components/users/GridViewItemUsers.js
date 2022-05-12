@@ -1,10 +1,10 @@
 import {useContext} from 'react'
 import {timestampToPersianDate} from '../../modules/HelperFunctions'
 import UsersContext from '../../states/contexts/users'
-import {deleteUser, setUserIdForUpdate, setModalStatus} from '../../states/actions/users'
+import {deleteUser, setModalStatus, setUserIdForUpdate} from '../../states/actions/users'
 import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
-import TableRowElement from '../elements/TableRow'
-import TableDataElement from '../elements/TableData'
+import TableRowElement from '../elements/TableRowElement'
+import TableDataElement from '../elements/TableDataElement'
 import localS from '../../modules/LocalStorage'
 import swal from '../../modules/SwalAlert'
 
@@ -44,8 +44,11 @@ const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, i
             <TableDataElement>{isAdmin === '0' ? 'معمولی' : 'مدیر'}</TableDataElement>
             <TableDataElement>{timestampToPersianDate(createdAt)}</TableDataElement>
             <TableDataElement>
-                <button onClick={updateHandler} className="bg-green-700 text-white p-1 ml-2 text-sm rounded-md show">ویرایش</button>
-                <button onClick={deleteHandler} className="bg-red-600 text-white p-1 text-sm rounded-md delete">حذف</button>
+                <button onClick={updateHandler}
+                        className="bg-green-700 text-white p-1 ml-2 text-sm rounded-md show">ویرایش
+                </button>
+                <button onClick={deleteHandler} className="bg-red-600 text-white p-1 text-sm rounded-md delete">حذف
+                </button>
             </TableDataElement>
         </TableRowElement>
     )

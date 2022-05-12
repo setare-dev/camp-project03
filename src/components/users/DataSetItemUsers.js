@@ -1,9 +1,9 @@
 import {useContext} from 'react'
 import {timestampToPersianDate} from '../../modules/HelperFunctions'
 import usersContext from '../../states/contexts/users'
-import {deleteUser, setUserIdForUpdate, setModalStatus} from '../../states/actions/users'
+import {deleteUser, setModalStatus, setUserIdForUpdate} from '../../states/actions/users'
 import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
-import DataSetRowElement from '../elements/DataSetRow'
+import DataSetRowElement from '../elements/DataSetRowElement'
 import localS from '../../modules/LocalStorage'
 import swal from '../../modules/SwalAlert'
 
@@ -61,8 +61,11 @@ const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, is
             </DataSetRowElement>
 
             <div className="grid grid-cols-2">
-                <button onClick={updateHandler} className="bg-green-700 text-white p-2 text-sm rounded-r-md show">ویرایش</button>
-                <button onClick={deleteHandler} className="bg-red-600 text-white p-2 text-sm rounded-l-md delete">حذف</button>
+                <button onClick={updateHandler}
+                        className="bg-green-700 text-white p-2 text-sm rounded-r-md show">ویرایش
+                </button>
+                <button onClick={deleteHandler} className="bg-red-600 text-white p-2 text-sm rounded-l-md delete">حذف
+                </button>
             </div>
         </div>
     )
