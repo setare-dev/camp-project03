@@ -48,7 +48,7 @@ const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, is
 
             <DataSetRowElement>
                 <div className="ml-1 opacity-60">نوع کاربری</div>
-                <div>{isAdmin === 0 ? 'معمولی' : 'مدیر'}</div>
+                <div>{isAdmin === "0" ? 'معمولی' : 'مدیر'}</div>
             </DataSetRowElement>
 
             <DataSetRowElement>
