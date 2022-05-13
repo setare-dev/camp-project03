@@ -1,3 +1,5 @@
+import {v4 as uuidv4} from 'uuid'
+
 /**
  * This class is responsible for managing the removal and recording of information in local storage.
  */
@@ -50,7 +52,7 @@ class LocalStorage {
      */
     insert (obj) {
         const data = this.all()
-        const id = Date.now()
+        const id = uuidv4()
         data.unshift({...obj, id})
         localStorage[this.key] = JSON.stringify(data)
 
