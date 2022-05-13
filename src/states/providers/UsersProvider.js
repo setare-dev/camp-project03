@@ -2,7 +2,7 @@ import {useEffect, useReducer} from 'react'
 import usersReducer from '../reducers/UsersReducer'
 import UsersContext from './../contexts/users'
 import {setUsers} from '../actions/users'
-import localS from './../../modules/LocalStorage'
+import localS from '../../modules/LocalStorage'
 
 /**
  * This provider provides user status.

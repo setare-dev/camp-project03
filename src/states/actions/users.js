@@ -1,4 +1,4 @@
-import {SET_USERS, ADD_USER, DELETE_USER, UPDATE_USER, SET_MODAL_STATUS, SET_USER_ID_FOR_UPDATE} from './../constants/user'
+import {SET_USERS, ADD_USER, DELETE_USER, UPDATE_USER, SET_MODAL_STATUS, SET_USER_ID_FOR_UPDATE} from '../constants/user'
 
 /**
  * The action is to register users in the state.
