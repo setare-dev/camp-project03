@@ -44,11 +44,8 @@ const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, i
             <TableDataElement>{isAdmin === '0' ? 'معمولی' : 'مدیر'}</TableDataElement>
             <TableDataElement>{timestampToPersianDate(createdAt)}</TableDataElement>
             <TableDataElement>
-                <button onClick={updateHandler}
-                        className="bg-green-700 text-white p-1 ml-2 text-sm rounded-md show">ویرایش
-                </button>
-                <button onClick={deleteHandler} className="bg-red-600 text-white p-1 text-sm rounded-md delete">حذف
-                </button>
+                <button onClick={updateHandler} className="bg-green-700 text-white p-1 ml-2 text-sm rounded-md show hover:bg-green-800 focus:outline-none">ویرایش</button>
+                <button onClick={deleteHandler} className="bg-red-600 text-white p-1 text-sm rounded-md delete hover:bg-red-700 focus:outline-none">حذف</button>
             </TableDataElement>
         </TableRowElement>
     )
