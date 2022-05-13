@@ -67,6 +67,24 @@ const ModalFormUsers = () => {
     }, [state.users, state.userIdForUpdate])
 
     /**
+     * To close the modal, we define and delete the listener.
+     */
+    useEffect(() => {
+        window.addEventListener('keydown', closeModalFormWithESC)
+        return () => window.removeEventListener('keydown', closeModalFormWithESC)
+    })
+
+    /**
+     * If the ESC key is pressed, the modal closes.
+     * @param e Contains event related to the window global object.
+     */
+    const closeModalFormWithESC = (e) => {
+        if (e.keyCode === 27) {
+            dispatch(setModalStatus(false))
+        }
+    }
+
+    /**
      * This function is to receive data from inputs and register it in the object.
      * @param key Contains the key to assign value in it.
      * @param value Contains a value to record in a variable.
@@ -115,8 +133,7 @@ const ModalFormUsers = () => {
             <div className="flex justify-center pt-4 px-4 pb-20 text-center sm:block">
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-                <div
-                    className="relative inline-block align-bottom bg-white dark:bg-gray-700 rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl w-full px-4 py-6">
+                <div className="relative inline-block align-bottom bg-white dark:bg-gray-700 rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl w-full px-4 py-6">
                     <h4 className="flex items-center text-2xl mb-8 font-semibold text-gray-500 dark:text-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-7 ml-2" fill="none" viewBox="0 0 24 24"
                              stroke="currentColor" strokeWidth="2">
