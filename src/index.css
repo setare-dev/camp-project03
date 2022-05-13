@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "~vazir-font/dist/font-face.css";
+@import "~vazirmatn/Vazirmatn-font-face.css";
 
 @layer base {
   html {
-    font-family: Vazir
+    font-family: Vazirmatn, sans-serif;
   }
 }
 
