@@ -19,5 +19,7 @@ export default createContext({
         }
     ],
     modalStatus: Boolean,
-    userIdForUpdate: Number | null
+    userIdForUpdate: Number | null,
+    filterValue: String,
+    isLoading: Boolean
 })

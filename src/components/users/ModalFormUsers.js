@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from 'react'
-import UsersContext from '../../states/contexts/users'
-import {addUser, setModalStatus, setUserIdForUpdate, updateUser} from '../../states/actions/users'
+import usersContext from '../../states/contexts/users'
+import {addUser, setModalStatus, setUserIdForUpdate, updateUser, setFilterValue} from '../../states/actions/users'
 import {validation} from '../../modules/HelperFunctions'
 import {FORM_ERRORS, SUCCESSFUL_OPERATION} from '../../constants/responses'
 import InputElement from '../elements/InputElement'
@@ -55,7 +55,7 @@ const ModalFormUsers = () => {
 
     const [errors, setErrors] = useState({})
 
-    const {state, dispatch} = useContext(UsersContext)
+    const {state, dispatch} = useContext(usersContext)
 
     /**
      * Specify the form for new editing or registration.
@@ -116,7 +116,9 @@ const ModalFormUsers = () => {
                 dispatch(updateUser(data))
             } else {
                 const id = localS.insert(data)
-                dispatch(addUser({...data, id}))
+                state.filterValue === 'all' 
+                    ? dispatch(addUser({...data, id})) 
+                    : dispatch(setFilterValue('all'))
             }
 
             cancelHandler()

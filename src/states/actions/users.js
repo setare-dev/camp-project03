@@ -1,4 +1,12 @@
-import {SET_USERS, ADD_USER, DELETE_USER, UPDATE_USER, SET_MODAL_STATUS, SET_USER_ID_FOR_UPDATE} from '../constants/user'
+import {
+    SET_USERS, ADD_USER, 
+    DELETE_USER, 
+    UPDATE_USER, 
+    SET_MODAL_STATUS, 
+    SET_USER_ID_FOR_UPDATE, 
+    SET_FILTER_VALUE, 
+    SET_IS_LOADING
+} from '../constants/user'
 
 /**
  * The action is to register users in the state.
@@ -58,4 +66,24 @@ export const setModalStatus = status => ({
 export const setUserIdForUpdate = id => ({
 	type: SET_USER_ID_FOR_UPDATE,
     payload: {id}
+})
+
+/**
+ * This action changes the amount of Filter value.
+ * @param value Contains the value to be searched.
+ * @returns Contains action object and filter value.
+ */
+export const setFilterValue = value => ({
+	type: SET_FILTER_VALUE,
+    payload: {value}
+})
+
+/**
+ * This action changes the isLoading.
+ * @param status Contains a state that changes the loading mode.
+ * @returns Contains action object and status isLoading.
+ */
+export const setIsLoading = status => ({
+	type: SET_IS_LOADING,
+    payload: {status}
 })

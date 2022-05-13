@@ -1,4 +1,13 @@
-import {SET_USERS, ADD_USER, DELETE_USER, UPDATE_USER, SET_MODAL_STATUS, SET_USER_ID_FOR_UPDATE} from '../constants/user'
+import {
+    SET_USERS,
+    ADD_USER,
+    DELETE_USER,
+    UPDATE_USER,
+    SET_MODAL_STATUS,
+    SET_USER_ID_FOR_UPDATE,
+    SET_FILTER_VALUE,
+    SET_IS_LOADING
+} from '../constants/user'
 
 /**
  * This reducer is for operation on the state user, whose actions can be seen below.
@@ -11,6 +20,8 @@ const UsersReducer = (prevState, action) => {
         case UPDATE_USER: return updateUser(prevState, action)
         case SET_MODAL_STATUS: return setModalStatus(prevState, action)
         case SET_USER_ID_FOR_UPDATE: return setUserIdForUpdate(prevState, action)
+        case SET_FILTER_VALUE: return setFilterValue(prevState, action)
+        case SET_IS_LOADING: return setIsLoading(prevState, action)
         default: return prevState
     }
 }
@@ -72,5 +83,21 @@ const setModalStatus = (prevState, action) => ({...prevState, modalStatus: actio
  * @returns Return the new state after editing the user.
  */
 const setUserIdForUpdate = (prevState, action) => ({...prevState, userIdForUpdate: action.payload.id})
+
+/**
+ * This method stores the search value in the state.
+ * @param prevState Contains previous status.
+ * @param action Contains a load that is the same as the search filter.
+ * @returns The output of the state is new.
+ */
+const setFilterValue = (prevState, action) => ({...prevState, filterValue: action.payload.value})
+
+/**
+ * This method changes the amount of isLoading.
+ * @param prevState Contains previous status.
+ * @param action contains a load which is the same as isLoading.
+ * @returns The output of the state is new.
+ */
+const setIsLoading = (prevState, action) => ({...prevState, isLoading: action.payload.status})
 
 export default UsersReducer

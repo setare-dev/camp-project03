@@ -27,6 +27,17 @@ class LocalStorage {
     select (id) {
         return JSON.parse(decode(localStorage[this.key]))?.filter(item => item.id === id)
     }
+
+    /**
+     * This method performs a search operation on a specific field.
+     * @param field Contains the field name.
+     * @param value Contains search value.
+     * @returns Output records of data stored in local memory.
+     */
+    async search (field, value) {
+        const data = await this.allWithDelay()
+        return new Promise((resolve) => field === '*' ? resolve(data) : resolve(data.filter(item => item[field] === value)))
+    }
     
 
     /**
@@ -42,7 +53,7 @@ class LocalStorage {
      * This method is responsible for returning all data from the local storage.
      * @returns The output of the array is empty or all records in local storage.
      */
-     allWithDelay (delay = 4000) {
+     allWithDelay (delay = 2000) {
         return new Promise((resolve) => setTimeout(() => resolve(this.all()), delay))
     }
 

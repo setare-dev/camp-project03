@@ -1,6 +1,6 @@
 import {useContext} from 'react'
 import {timestampToPersianDate} from '../../modules/HelperFunctions'
-import UsersContext from '../../states/contexts/users'
+import usersContext from '../../states/contexts/users'
 import {deleteUser, setModalStatus, setUserIdForUpdate} from '../../states/actions/users'
 import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
 import TableRowElement from '../elements/TableRowElement'
@@ -12,7 +12,7 @@ import swal from '../../modules/SwalAlert'
  * The task of this component is to create a record of users in the form of a data gridview.
  */
 const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
-    const {dispatch} = useContext(UsersContext)
+    const {dispatch} = useContext(usersContext)
 
     /**
      * Perform user delete operations.
