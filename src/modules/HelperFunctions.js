@@ -1,5 +1,7 @@
 import Validator from 'Validator'
 import moment from 'jalali-moment'
+import CryptoES from 'crypto-es'
+import CryptoJS from 'crypto-js'
 
 /**
  * This is a helper function for validating forms.
@@ -41,4 +43,23 @@ export const random = (min, max) => {
     min = Math.ceil(min)
     max = Math.floor(max)
     return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+/**
+ * With this helper function, we encrypt the texts.
+ * @param text Is text that must be encrypted.
+ * @returns Encrypted text is returned.
+ */
+export const encode = (text) => {
+    return CryptoES.AES.encrypt(text, process.env.REACT_APP_CRYPTO_SECRET_KEY).toString()
+}
+
+/**
+ * With this help function, we decrypt the texts.
+ * @param encrypted Contains encrypted text.
+ * @returns The decrypted text is returned.
+ */
+export const decode = (encrypted) => {
+    const decrypted = CryptoJS.AES.decrypt(encrypted, process.env.REACT_APP_CRYPTO_SECRET_KEY)
+    return decrypted.toString(CryptoJS.enc.Utf8)
 }
