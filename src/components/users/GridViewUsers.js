@@ -9,13 +9,13 @@ import TableFooter from '../table/TableFooter'
  * The task of this component is to create a data gridview from the list of users.
  */
 const GridViewUsers = () => {
-    const {state} = useContext(usersContext)
+    const {state: {users}} = useContext(usersContext)
 
     return (
         <TableElement>
             <TableHead titles={['نام', 'متولد', 'جنسیت', 'ایمیل', 'کاربری', 'تاریخ عضویت', 'عملیات']}/>
-            <tbody>{state.users.map(user => <GridViewItem key={user.id} {...user} />)}</tbody>
-            <TableFooter data={state.users} colSpan="7"/>
+            <tbody>{users.map(user => <GridViewItem key={user.id} {...user} />)}</tbody>
+            <TableFooter dataLength={users.length} colSpan="7"/>
         </TableElement>
     )
 }
