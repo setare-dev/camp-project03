@@ -115,7 +115,6 @@ const ModalFormUsers = () => {
             await validation(data, rules, messages)
             userIdForUpdate ? await updateHandler() : await insertHandler()
             cancelHandler()
-            window.scrollTo({top: 0, behavior: 'smooth'})
             swal.toast('success', SUCCESSFUL_OPERATION)
         } catch (errors) {
             setErrors(errors)
@@ -135,6 +134,7 @@ const ModalFormUsers = () => {
             filterValue === 'all'
                 ? dispatch(addUser({...data, id})) 
                 : dispatch(setFilterValue('all'))
+            window.scrollTo({top: 0, behavior: 'smooth'})
             
             return resolve()
         })
