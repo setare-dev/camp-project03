@@ -7,6 +7,7 @@ import InputElement from '../elements/InputElement'
 import MultiColumnElement from '../elements/MultiColumnElement'
 import SelectElement from '../elements/SelectElement'
 import DateBirthElement from '../elements/DataBirthElement'
+import ButtonElementLoading from '../loadings/ButtonElementLoading'
 import localS from '../../modules/LocalStorage'
 import swal from '../../modules/SwalAlert'
 
@@ -54,6 +55,8 @@ const ModalFormUsers = () => {
     const [data, setData] = useState(initialData)
 
     const [errors, setErrors] = useState({})
+
+    const [isSubmit, setIsSubmit] = useState(false)
 
     const {state: {users, userIdForUpdate, modalStatus, filterValue}, dispatch} = useContext(usersContext)
 
@@ -110,17 +113,7 @@ const ModalFormUsers = () => {
         try {
             e.preventDefault()
             await validation(data, rules, messages)
-
-            if (userIdForUpdate) {
-                localS.update(data)
-                dispatch(updateUser(data))
-            } else {
-                const id = localS.insert(data)
-                filterValue === 'all' 
-                    ? dispatch(addUser({...data, id})) 
-                    : dispatch(setFilterValue('all'))
-            }
-
+            userIdForUpdate ? await updateHandler() : await insertHandler()
             cancelHandler()
             window.scrollTo({top: 0, behavior: 'smooth'})
             swal.toast('success', SUCCESSFUL_OPERATION)
@@ -128,6 +121,38 @@ const ModalFormUsers = () => {
             setErrors(errors)
             swal.toast('error', FORM_ERRORS)
         }
+    }
+
+    /**
+     * This function performs the insertion operation.
+     * @returns The output of a promise is without value.
+     */
+    const insertHandler = () => {
+        return new Promise(async (resolve) => {
+            setIsSubmit(true)
+            const id = await localS.insert(data)
+            setIsSubmit(false)
+            filterValue === 'all'
+                ? dispatch(addUser({...data, id})) 
+                : dispatch(setFilterValue('all'))
+            
+            return resolve()
+        })
+    }
+
+    /**
+     * This function performs the update operation.
+     * @returns The output of a promise is without value.
+     */
+    const updateHandler = () => {
+        return new Promise(async (resolve) => {
+            setIsSubmit(true)
+            await localS.update(data)
+            dispatch(updateUser(data))
+            setIsSubmit(false)
+
+            return resolve()
+        })
     }
 
     return (
@@ -157,9 +182,9 @@ const ModalFormUsers = () => {
                             <SelectElement label="نوع کاربری" keyname="isAdmin" value={data.isAdmin} options={[{value: 0, text: 'معمولی'}, {value: 1, text: 'مدیر'}]} error={errors.isAdmin} inputHandler={inputHandler}/>
                         </MultiColumnElement>
 
-                        <div className="text-left mt-8">
-                            <button type="submit" className="lose justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-700 text-base font-medium text-white hover:bg-green-800 focus:outline-none ml-3 sm:w-auto sm:text-sm focus:bg-green-800">{userIdForUpdate ? 'ویرایش' : 'ثبت'}</button>
-                            <button onClick={cancelHandler} type="button" className="lose justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:w-auto sm:text-sm focus:bg-red-800">انصراف</button>
+                        <div className="text-left mt-8 flex items-center justify-end">
+                            <ButtonElementLoading text={userIdForUpdate ? 'ویرایش' : 'ثبت'} isSubmit={isSubmit} size="md" className={`${isSubmit ? 'opacity-60' : 'opacity-1'} bg-green-700 hover:bg-green-800 focus:bg-green-800`} />
+                            <button disabled={isSubmit ? 'disabled' : ''} onClick={cancelHandler} type="button" className={`${isSubmit ? 'opacity-60' : 'opacity-1'} rounded-md px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:w-auto focus:bg-red-800`}>انصراف</button>
                         </div>
                     </form>
                 </div>

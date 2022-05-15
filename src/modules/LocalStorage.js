@@ -62,16 +62,20 @@ class LocalStorage {
     /**
      * This method is responsible for recording a record in local storage.
      * @param obj Contains a object of data to record in local storage.
-     * @returns Generated user id output.
+     * @returns The output of a promise of user id.
      */
     insert (obj) {
-        const data = this.all()
-        const id = uuidv4()
-        data.unshift({...obj, id})
-        localStorage[this.key] = JSON.stringify(data)
-        this.setTotal(data.length)
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const data = this.all()
+                const id = uuidv4()
+                data.unshift({...obj, id})
+                localStorage[this.key] = JSON.stringify(data)
+                this.setTotal(data.length)
 
-        return id
+                return resolve(id)
+            }, 2000)
+        })
     }
 
     /**
@@ -86,14 +90,20 @@ class LocalStorage {
     /**
      * This method is responsible for removing the desired record from the local storage.
      * @param id Contains the desired ID to delete the record.
+     * @returns The output of a promise is without value.
      */
     delete (id) {
-        if (this.isDataInLocalStorage()) {
-            let data = JSON.parse(localStorage[this.key])
-            data = data.filter(item => item.id !== id)
-            localStorage[this.key] = JSON.stringify(data)
-            this.setTotal(data.length)
-        }
+        return new Promise(resolve => {
+            setTimeout(() => {
+                if (this.isDataInLocalStorage()) {
+                    let data = JSON.parse(localStorage[this.key])
+                    data = data.filter(item => item.id !== id)
+                    localStorage[this.key] = JSON.stringify(data)
+                    this.setTotal(data.length)
+                    return resolve()
+                }
+            }, 2000)
+        })
     }
 
     /**
@@ -109,15 +119,22 @@ class LocalStorage {
     /**
      * This method is for editing the record.
      * @param dataObj This parameter contains the information that is to be replaced.
+     * @returns The output of a promise is without value.
      */
     update (dataObj) {
-        if (this.isDataInLocalStorage()) {
-            let {id} = dataObj
-            let data = JSON.parse(localStorage[this.key])
-            let index = data.findIndex(user => user.id === id)
-            data[index] = dataObj
-            localStorage[this.key] = JSON.stringify(data)
-        }
+        return new Promise(resolve => {
+            setTimeout(() => {
+                if (this.isDataInLocalStorage()) {
+                    let {id} = dataObj
+                    let data = JSON.parse(localStorage[this.key])
+                    let index = data.findIndex(user => user.id === id)
+                    data[index] = dataObj
+                    localStorage[this.key] = JSON.stringify(data)
+
+                    return resolve()
+                }
+            }, 2000)
+        })
     }
 
     /**
