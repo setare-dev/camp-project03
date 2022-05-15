@@ -121,6 +121,10 @@ class LocalStorage {
         }
     }
 
+    /**
+     * This method is responsible for storing the total number of records in the local storage.
+     * @param count Contains the total number of records.
+     */
     setTotal (count = 0) {
         localStorage.total = count
     }
