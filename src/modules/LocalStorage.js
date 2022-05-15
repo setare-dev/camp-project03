@@ -45,8 +45,11 @@ class LocalStorage {
      * @returns The output of the array is empty or all records in local storage.
      */
     all () {
+        this.setTotal()
         if (!this.isDataInLocalStorage()) return []
-        return JSON.parse(decode(localStorage[this.key]))
+        const data = JSON.parse(decode(localStorage[this.key]))
+        this.setTotal(data.length)
+        return data
     }
 
     /**
@@ -67,6 +70,7 @@ class LocalStorage {
         const id = uuidv4()
         data.unshift({...obj, id})
         localStorage[this.key] = encode(JSON.stringify(data))
+        this.setTotal(data.length)
 
         return id
     }
@@ -77,6 +81,7 @@ class LocalStorage {
      */
     multipleInsert (data) {
         localStorage[this.key] = encode(JSON.stringify(data))
+        this.setTotal(this.all().length)
     }
 
     /**
@@ -88,6 +93,7 @@ class LocalStorage {
             let data = JSON.parse(decode(localStorage[this.key]))
             data = data.filter(item => item.id !== id)
             localStorage[this.key] = encode(JSON.stringify(data))
+            this.setTotal(data.length)
         }
     }
 
@@ -97,6 +103,7 @@ class LocalStorage {
      */
     deleteAll () {
         localStorage[this.key] = encode('[]')
+        this.setTotal()
         return this
     }
 
@@ -112,6 +119,10 @@ class LocalStorage {
             data[index] = dataObj
             localStorage[this.key] = encode(JSON.stringify(data))
         }
+    }
+
+    setTotal (count = 0) {
+        localStorage.total = count
     }
 }
 

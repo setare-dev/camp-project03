@@ -31,7 +31,7 @@ const UsersReducer = (prevState, action) => {
  * @param action Contains payload which is the same as users information array.
  * @returns A new state in which a new user is added.
  */
- const setUsers = (prevState, action) => ({...prevState, users: action.payload.users})
+ const setUsers = (prevState, {payload: {users}}) => ({...prevState, users})
 
 /**
  * The task of this method is to add a new user.
@@ -39,10 +39,7 @@ const UsersReducer = (prevState, action) => {
  * @param action Contains payload which is the same as user information.
  * @returns A new state in which a new user is added.
  */
-const addUser = (prevState, action) => {
-    let {user} = action.payload
-    return {...prevState, users: [user, ...prevState.users]}
-}
+const addUser = (prevState, {payload: {user}}) => ({...prevState, users: [user, ...prevState.users]})
 
 /**
  * The task of this method is to delete the user.
@@ -50,10 +47,7 @@ const addUser = (prevState, action) => {
  * @param action Contains payload which is the same as user id.
  * @returns After deleting the user, the new state is returned.
  */
-const deleteUser = (prevState, action) => {
-    let {id} = action.payload
-    return {...prevState, users: [...prevState.users.filter(user => user.id !== id)]}
-}
+const deleteUser = (prevState, {payload: {id}}) => ({...prevState, users: [...prevState.users.filter(user => user.id !== id)]})
 
 /**
  * This method is responsible for editing user information.
@@ -61,12 +55,7 @@ const deleteUser = (prevState, action) => {
  * @param action Contains payload which is the same as user id and user information.
  * @returns Return the new state after editing the desired user.
  */
-const updateUser = (prevState, action) => {
-    let {id} = action.payload.user
-    let index = prevState.users.findIndex(user => user.id === id)
-    prevState.users[index] = action.payload.user
-    return {...prevState, users: prevState.users}
-}
+const updateUser = (prevState, {payload: {user}}) => ({...prevState, users: prevState.users.map(item => item.id === user.id ? user: item )})
 
 /**
  * 
@@ -74,7 +63,7 @@ const updateUser = (prevState, action) => {
  * @param action Contains payload which is the same as status for modal form.
  * @returns Return the new state after editing the status modal.
  */
-const setModalStatus = (prevState, action) => ({...prevState, modalStatus: action.payload.status})
+const setModalStatus = (prevState, {payload: {status}}) => ({...prevState, modalStatus: status})
 
 /**
  * 
@@ -82,7 +71,7 @@ const setModalStatus = (prevState, action) => ({...prevState, modalStatus: actio
  * @param action Contains payload which is the same as user id for update.
  * @returns Return the new state after editing the user.
  */
-const setUserIdForUpdate = (prevState, action) => ({...prevState, userIdForUpdate: action.payload.id})
+const setUserIdForUpdate = (prevState, {payload: {id}}) => ({...prevState, userIdForUpdate: id})
 
 /**
  * This method stores the search value in the state.
@@ -90,7 +79,7 @@ const setUserIdForUpdate = (prevState, action) => ({...prevState, userIdForUpdat
  * @param action Contains a load that is the same as the search filter.
  * @returns The output of the state is new.
  */
-const setFilterValue = (prevState, action) => ({...prevState, filterValue: action.payload.value})
+const setFilterValue = (prevState, {payload: {value}}) => ({...prevState, filterValue: value})
 
 /**
  * This method changes the amount of isLoading.
@@ -98,6 +87,6 @@ const setFilterValue = (prevState, action) => ({...prevState, filterValue: actio
  * @param action contains a load which is the same as isLoading.
  * @returns The output of the state is new.
  */
-const setIsLoading = (prevState, action) => ({...prevState, isLoading: action.payload.status})
+const setIsLoading = (prevState, {payload: {status}}) => ({...prevState, isLoading: status})
 
 export default UsersReducer
