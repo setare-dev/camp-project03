@@ -1,4 +1,3 @@
-import {encode, decode} from './HelperFunctions'
 import {v4 as uuidv4} from 'uuid'
 
 /**
@@ -25,7 +24,7 @@ class LocalStorage {
      * @returns The output contains an object from a record.
      */
     select (id) {
-        return JSON.parse(decode(localStorage[this.key]))?.filter(item => item.id === id)
+        return JSON.parse(localStorage[this.key])?.filter(item => item.id === id)
     }
 
     /**
@@ -47,7 +46,7 @@ class LocalStorage {
     all () {
         this.setTotal()
         if (!this.isDataInLocalStorage()) return []
-        const data = JSON.parse(decode(localStorage[this.key]))
+        const data = JSON.parse(localStorage[this.key])
         this.setTotal(data.length)
         return data
     }
@@ -69,7 +68,7 @@ class LocalStorage {
         const data = this.all()
         const id = uuidv4()
         data.unshift({...obj, id})
-        localStorage[this.key] = encode(JSON.stringify(data))
+        localStorage[this.key] = JSON.stringify(data)
         this.setTotal(data.length)
 
         return id
@@ -80,7 +79,7 @@ class LocalStorage {
      * @param data This parameter contains an array of data.
      */
     multipleInsert (data) {
-        localStorage[this.key] = encode(JSON.stringify(data))
+        localStorage[this.key] = JSON.stringify(data)
         this.setTotal(this.all().length)
     }
 
@@ -90,9 +89,9 @@ class LocalStorage {
      */
     delete (id) {
         if (this.isDataInLocalStorage()) {
-            let data = JSON.parse(decode(localStorage[this.key]))
+            let data = JSON.parse(localStorage[this.key])
             data = data.filter(item => item.id !== id)
-            localStorage[this.key] = encode(JSON.stringify(data))
+            localStorage[this.key] = JSON.stringify(data)
             this.setTotal(data.length)
         }
     }
@@ -102,7 +101,7 @@ class LocalStorage {
      * @returns Is the output of the class.
      */
     deleteAll () {
-        localStorage[this.key] = encode('[]')
+        localStorage[this.key] = '[]'
         this.setTotal()
         return this
     }
@@ -114,10 +113,10 @@ class LocalStorage {
     update (dataObj) {
         if (this.isDataInLocalStorage()) {
             let {id} = dataObj
-            let data = JSON.parse(decode(localStorage[this.key]))
+            let data = JSON.parse(localStorage[this.key])
             let index = data.findIndex(user => user.id === id)
             data[index] = dataObj
-            localStorage[this.key] = encode(JSON.stringify(data))
+            localStorage[this.key] = JSON.stringify(data)
         }
     }
 
