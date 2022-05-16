@@ -20,11 +20,11 @@ const PaginateUsers = ({pageHandler, pageCount, itemOffset, countOnCurrentPage, 
         
         <div className="text-gray-500 dark:text-gray-300 text-center md:text-right space-x-reverse space-x-1">
             <span>سطر</span>
-            <span className="font-semibold">{itemOffset + 1}</span>
+                <span className="font-semibold">{itemOffset + 1}</span>
             <span>تا سطر</span>
-            <span className="font-semibold">{itemOffset + countOnCurrentPage}</span>
+                <span className="font-semibold">{itemOffset + countOnCurrentPage}</span>
             <span>از</span>
-            <span className="font-semibold">{countTotalResult}</span>
+                <span className="font-semibold">{countTotalResult}</span>
             <span>نتیجه</span>
         </div>
     </>

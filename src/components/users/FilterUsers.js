@@ -8,7 +8,7 @@ import LocalS from '../../modules/LocalStorage'
  */
 const FilterUsers = () => {
 
-    const {state: {users, filterValue}, dispatch} = useContext(usersContact)
+    const {state: {filterValue}, dispatch} = useContext(usersContact)
     
     /**
      * By changing the filter value, the desired data is captured and stored in the state, as well as the search value is stored in local storage.
@@ -33,12 +33,6 @@ const FilterUsers = () => {
                 <option value="isAdmin:0">معمولی</option>
                 <option value="isAdmin:1">مدیر</option>
             </select>
-
-            {/** Displays the number of users searched.*/}
-            <div className="text-gray-500 dark:text-gray-300 space-x-reverse space-x-2 mt-3 md:mt-0">
-                {(users.length && localStorage.filterValue !== 'all') ? <><span className="font-semibold">{users.length}</span><span>نتیجه از</span></> : null}
-                {users.length ? <><span className="font-semibold">{localStorage.total}</span><span>رکورد</span></> : null}
-            </div>
         </div>
     )
 }
