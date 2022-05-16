@@ -14,7 +14,7 @@ const App = () => {
 
             <main className="relative" style={{minHeight: 'calc(100vh - 150px)'}}>
                 <UsersProvider>
-                    <IndexUsers/>
+                    <IndexUsers />
                 </UsersProvider>
             </main>
 
