@@ -84,7 +84,7 @@ const IndexUsers = ({itemsPerPage = 10}) => {
 
             {viewType ? <GridViewUsers users={currentItems} /> : <DataSetUsers users={currentItems} />}
 
-            {pageCount > 1 ? <PaginateUsers pageHandler={pageHandler} pageCount={pageCount} /> : null}
+            {pageCount > 1 ? <PaginateUsers pageHandler={pageHandler} pageCount={pageCount} itemOffset={itemOffset} countOnCurrentPage={currentItems.length} countTotalResult={users.length} /> : null}
 
             <ModalFormUsers/>
 
