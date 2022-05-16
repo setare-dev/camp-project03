@@ -11,7 +11,7 @@ import FilterUsers from './FilterUsers'
 /**
  * This is the parent component for the users page.
  */
-const IndexUsers = ({itemsPerPage = process.env.REACT_APP_PAGINATE_PER_PAGE ?? 2}) => {
+const IndexUsers = ({itemsPerPage = 10}) => {
 
     const {state: {users, filterValue}, dispatch} = useContext(UsersContext)
 

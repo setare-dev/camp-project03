@@ -8,7 +8,7 @@ class LocalStorage {
     /**
      * This property specifies the key name of the data in the local storage.
      */
-    key = 'users'
+    key = 'USERS_MY_APP'
 
     /**
      * This method is responsible for checking the key name in the local storage.
@@ -81,10 +81,17 @@ class LocalStorage {
     /**
      * This method is responsible for recording several records in local storge.
      * @param data This parameter contains an array of data.
+     * @returns The output of a promise is without value.
      */
     multipleInsert (data) {
-        localStorage[this.key] = JSON.stringify(data)
-        this.setTotal(this.all().length)
+        return new Promise(resolve => {
+            localStorage[this.key] = !this.isDataInLocalStorage()
+                ? JSON.stringify(data)
+                : localStorage[this.key] = JSON.stringify([...data, ...JSON.parse(localStorage[this.key])])
+            this.setTotal(this.all().length)
+
+            return resolve()
+        })
     }
 
     /**
@@ -100,6 +107,7 @@ class LocalStorage {
                     data = data.filter(item => item.id !== id)
                     localStorage[this.key] = JSON.stringify(data)
                     this.setTotal(data.length)
+
                     return resolve()
                 }
             }, 2000)
