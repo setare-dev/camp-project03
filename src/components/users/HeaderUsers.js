@@ -3,17 +3,24 @@ import usersContext from '../../states/contexts/users'
 import {setUsers, setIsLoading} from '../../states/actions/users'
 import dataFactory from '../../modules/DataFactory'
 import localS from '../../modules/LocalStorage'
+import swal from '../../modules/SwalAlert'
+import {SUCCESSFUL_OPERATION} from '../../constants/responses'
 
 const HeaderUsers = ({viewType, changeViewType, showModalForCreateForm}) => {
 
     const {dispatch} = useContext(usersContext)
 
+    /**
+     * This function is responsible for creating fake data.
+     */
     const dataFactoryHandler = async () => {
         dispatch(setIsLoading(true))
         await (new dataFactory()).insert()
         const users = await localS.allWithDelay()
         dispatch(setUsers(users))
         dispatch(setIsLoading(false))
+        window.scrollTo({top: 0, behavior: 'smooth'})
+        swal.toast('success', SUCCESSFUL_OPERATION)
     }
 
     return (

@@ -1,6 +1,6 @@
 import ReactPaginate from 'react-paginate'
 
-const PaginateUsers = ({pageHandler, pageCount, itemOffset, countOnCurrentPage, countTotalResult}) => (
+const PaginateUsers = ({pageHandler, pageCount, itemOffset, currentItemsLength, countTotalResult}) => (
     <>
         <ReactPaginate
             breakLabel=". . ."
@@ -22,7 +22,7 @@ const PaginateUsers = ({pageHandler, pageCount, itemOffset, countOnCurrentPage, 
             <span>سطر</span>
                 <span className="font-semibold">{itemOffset + 1}</span>
             <span>تا سطر</span>
-                <span className="font-semibold">{itemOffset + countOnCurrentPage}</span>
+                <span className="font-semibold">{itemOffset + currentItemsLength}</span>
             <span>از</span>
                 <span className="font-semibold">{countTotalResult}</span>
             <span>نتیجه</span>
