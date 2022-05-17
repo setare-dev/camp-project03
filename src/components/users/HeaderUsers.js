@@ -23,7 +23,7 @@ const HeaderUsers = ({viewType, changeViewType, showModalForCreateForm}) => {
         setTimeout(() => {
             dispatch(setSelectedUsers([]))
             dispatch(setIsSelectAll(false))
-        }, 1)
+        }, 10)
         swal.toast('success', SUCCESSFUL_REMOVAL)
     }
 
