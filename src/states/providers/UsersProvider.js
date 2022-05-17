@@ -16,7 +16,9 @@ const UsersProvider = ({children}) => {
         modalStatus: false,
         userIdForUpdate: null,
         filterValue: 'all',
-        isLoading: false
+        isLoading: false,
+        selectedUsers: [],
+        isSelectAll: false
     })
 
     /**

@@ -4,6 +4,7 @@ import usersContext from '../../states/contexts/users'
 import {deleteUser, setModalStatus, setUserIdForUpdate} from '../../states/actions/users'
 import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
 import DataSetRowElement from '../elements/DataSetRowElement'
+import DataSetItemSelectUsers from './DataSetItemSelectUsers'
 import localS from '../../modules/LocalStorage'
 import swal from '../../modules/SwalAlert'
 
@@ -15,6 +16,8 @@ const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, is
     const {dispatch} = useContext(usersContext)
 
     const [isDeliting, setIsDeliting] = useState(false)
+
+    const [isSelect, setIsSelect] = useState(false)
 
     /**
      * Perform user delete operations.
@@ -39,7 +42,10 @@ const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, is
     }
 
     return (
-        <div className="bg-gray-200 dark:bg-gray-900 p-3 rounded-lg space-y-3">
+        <div className={`${isSelect ? 'bg-indigo-100 dark:bg-slate-400/50' : 'bg-gray-200 dark:bg-gray-900'} p-3 rounded-lg space-y-3 relative`}>
+            
+            <DataSetItemSelectUsers userId={id} isSelect={isSelect} setIsSelect={setIsSelect} />
+
             <DataSetRowElement className="text-lg font-semibold">
                 <div className="ml-1">{gender === '0' ? 'آقای' : 'خانم'}</div>
                 <div className="ml-1">{name}</div>

@@ -99,7 +99,7 @@ class LocalStorage {
      * @param id Contains the desired ID to delete the record.
      * @returns The output of a promise is without value.
      */
-    delete (id) {
+    delete (id, delay = 2000) {
         return new Promise(resolve => {
             setTimeout(() => {
                 if (this.isDataInLocalStorage()) {
@@ -110,7 +110,7 @@ class LocalStorage {
 
                     return resolve()
                 }
-            }, 2000)
+            }, delay)
         })
     }
 

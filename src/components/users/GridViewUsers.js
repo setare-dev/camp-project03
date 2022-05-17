@@ -10,7 +10,7 @@ const GridViewUsers = ({users}) => (
     <TableElement>
         <TableHead titles={['نام', 'متولد', 'جنسیت', 'ایمیل', 'کاربری', 'تاریخ عضویت', 'عملیات']}/>
         <tbody>{users.map(user => <GridViewItem key={user.id} {...user} />)}</tbody>
-        <TableFooter dataLength={users.length} colSpan="7"/>
+        <TableFooter dataLength={users.length} colSpan="8"/>
     </TableElement>
 )
 

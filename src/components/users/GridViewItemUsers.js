@@ -6,6 +6,7 @@ import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
 import TableRowElement from '../elements/TableRowElement'
 import TableDataElement from '../elements/TableDataElement'
 import ButtonElementLoading from '../loadings/ButtonElementLoading'
+import GridViewItemSelectUsers from './GridViewItemSelectUsers'
 import localS from '../../modules/LocalStorage'
 import swal from '../../modules/SwalAlert'
 
@@ -17,6 +18,8 @@ const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, i
     const {dispatch} = useContext(usersContext)
 
     const [isDeliting, setIsDeliting] = useState(false)
+
+    const [isSelect, setIsSelect] = useState(false)
 
     /**
      * Perform user delete operations.
@@ -42,7 +45,10 @@ const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, i
     }
 
     return (
-        <TableRowElement>
+        <TableRowElement isSelect={isSelect}>
+            <TableDataElement>
+                <GridViewItemSelectUsers userId={id} isSelect={isSelect} setIsSelect={setIsSelect} />
+            </TableDataElement>
             <TableDataElement>{name} {family}</TableDataElement>
             <TableDataElement>{year}/{month}/{day}</TableDataElement>
             <TableDataElement>{gender === '0' ? 'مرد' : 'زن'}</TableDataElement>

@@ -21,5 +21,7 @@ export default createContext({
     modalStatus: Boolean,
     userIdForUpdate: Number | null,
     filterValue: String,
-    isLoading: Boolean
+    isLoading: Boolean,
+    selectedUsers: [Number],
+    isSelectAll: Boolean
 })

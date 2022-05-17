@@ -6,7 +6,9 @@ import {
     SET_MODAL_STATUS,
     SET_USER_ID_FOR_UPDATE,
     SET_FILTER_VALUE,
-    SET_IS_LOADING
+    SET_IS_LOADING,
+    SET_SELECTED_USERS,
+    SET_IS_SELECT_ALL
 } from '../constants/user'
 
 /**
@@ -22,6 +24,8 @@ const UsersReducer = (prevState, action) => {
         case SET_USER_ID_FOR_UPDATE: return setUserIdForUpdate(prevState, action)
         case SET_FILTER_VALUE: return setFilterValue(prevState, action)
         case SET_IS_LOADING: return setIsLoading(prevState, action)
+        case SET_SELECTED_USERS: return setSelectedUsers(prevState, action)
+        case SET_IS_SELECT_ALL: return setIsSelectAll(prevState, action)
         default: return prevState
     }
 }
@@ -88,5 +92,21 @@ const setFilterValue = (prevState, {payload: {value}}) => ({...prevState, filter
  * @returns The output of the state is new.
  */
 const setIsLoading = (prevState, {payload: {status}}) => ({...prevState, isLoading: status})
+
+/**
+ * This method adds or removes user id values from the checkedUsers array.
+ * @param prevState Contains previous status.
+ * @param action Contains the desired user's id.
+ * @returns The output of the state is new.
+ */
+const setSelectedUsers = (prevState, {payload: {id}}) => ({...prevState, selectedUsers: typeof id !== 'string' ? [] : prevState.selectedUsers.includes(id) ? prevState.selectedUsers.filter(item => item !== id) : [...prevState.selectedUsers, id]})
+
+/**
+ * This method changes the amount of isSelectAll.
+ * @param prevState Contains previous status.
+ * @param action contains a load which is the same as isSelectAll.
+ * @returns The output of the state is new.
+ */
+const setIsSelectAll = (prevState, {payload: {status}}) => ({...prevState, isSelectAll: status})
 
 export default UsersReducer

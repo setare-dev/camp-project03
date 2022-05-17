@@ -5,7 +5,9 @@ import {
     SET_MODAL_STATUS, 
     SET_USER_ID_FOR_UPDATE, 
     SET_FILTER_VALUE, 
-    SET_IS_LOADING
+    SET_IS_LOADING,
+    SET_SELECTED_USERS,
+    SET_IS_SELECT_ALL
 } from '../constants/user'
 
 /**
@@ -63,3 +65,17 @@ export const setFilterValue = value => ({type: SET_FILTER_VALUE, payload: {value
  * @returns Contains action object and status isLoading.
  */
 export const setIsLoading = status => ({type: SET_IS_LOADING, payload: {status}})
+
+/**
+ * This action changes the checkedUsers.
+ * @param id Contains the desired user's id.
+ * @returns Contains action object and user Id.
+ */
+export const setSelectedUsers = id => ({type: SET_SELECTED_USERS, payload: {id}})
+
+/**
+ * This action changes the isSelectAll.
+ * @param status Contains a state that changes the select all mode.
+ * @returns Contains action object and status isSelectAll.
+ */
+export const setIsSelectAll = status => ({type: SET_IS_SELECT_ALL, payload: {status}})
