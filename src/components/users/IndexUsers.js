@@ -86,7 +86,7 @@ const IndexUsers = ({itemsPerPage = 10}) => {
 
             {pageCount > 1 || !currentItems.length ? <PaginateUsers pageHandler={pageHandler} pageCount={pageCount} itemOffset={itemOffset} currentItemsLength={currentItems.length} countTotalResult={users.length} /> : null}
 
-            <ModalFormUsers/>
+            <ModalFormUsers backdrop keyboard />
 
         </div>
     )
