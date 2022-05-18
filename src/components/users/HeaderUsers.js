@@ -17,14 +17,17 @@ const HeaderUsers = ({viewType, changeViewType, showModalForCreateForm}) => {
      * Has the task of group deletion of selected users.
      */
     const multiDeleteHandler = async () => {
-        dispatch(setIsLoading(true))
-        await deleter()
-        dispatch(setIsLoading(false))
-        setTimeout(() => {
-            dispatch(setSelectedUsers([]))
-            dispatch(setIsSelectAll(false))
-        }, 10)
-        swal.toast('success', SUCCESSFUL_REMOVAL)
+        const result = await swal.question()
+        if (result) {
+            dispatch(setIsLoading(true))
+            await deleter()
+            dispatch(setIsLoading(false))
+            setTimeout(() => {
+                dispatch(setSelectedUsers([]))
+                dispatch(setIsSelectAll(false))
+            }, 10)
+            swal.toast('success', SUCCESSFUL_REMOVAL)
+        }
     }
 
     /**
