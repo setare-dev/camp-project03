@@ -21,8 +21,10 @@ const initialData = {
     month: '',
     year: '',
     gender: '0', // 0: Male, 1: Female
-    email: '',
     isAdmin: '0', //0: Normal, 1: Admin,
+    email: '',
+    password: '',
+    password_confirmation: '',
     createdAt: Date.now()
 }
 
@@ -36,16 +38,7 @@ const rules = {
     month: 'required|integer|min:1|max:12',
     year: 'required|integer||min:1300|max:1401',
     email: 'required|email',
-}
-
-/**
- * Text errors that are required in validation.
- */
-const messages = {
-    required: 'فیلد الزامی است',
-    integer: 'فیلد باید عددی باشد',
-    min: 'فیلد نباید کمتر از 5 باشد',
-    email: 'فرمت نامعتبر است'
+    password: 'required|confirmed|min:8',
 }
 
 /**
@@ -112,7 +105,7 @@ const ModalFormUsers = ({backdrop = false, keyboard = false}) => {
     const submitHandler = async e => {
         try {
             e.preventDefault()
-            await validation(data, rules, messages)
+            await validation(data, rules)
             userIdForUpdate ? await updateHandler() : await insertHandler()
             cancelHandler()
             swal.toast('success', SUCCESSFUL_OPERATION)
@@ -178,8 +171,13 @@ const ModalFormUsers = ({backdrop = false, keyboard = false}) => {
                         </MultiColumnElement>
 
                         <MultiColumnElement>
-                            <InputElement label="ایمیل" keyname="email" value={data.email} error={errors.email} inputHandler={inputHandler} dir="ltr"/>
                             <SelectElement label="نوع کاربری" keyname="isAdmin" value={data.isAdmin} options={[{value: 0, text: 'معمولی'}, {value: 1, text: 'مدیر'}]} error={errors.isAdmin} inputHandler={inputHandler}/>
+                            <InputElement label="ایمیل" keyname="email" value={data.email} error={errors.email} inputHandler={inputHandler} dir="ltr"/>
+                        </MultiColumnElement>
+
+                        <MultiColumnElement>
+                            <InputElement type="password" label="رمز عبور" keyname="password" error={errors.password} inputHandler={inputHandler} dir="ltr"/>
+                            <InputElement type="password" label="تایید رمز عبور" keyname="password_confirmation" inputHandler={inputHandler} dir="ltr"/>
                         </MultiColumnElement>
 
                         <div className="text-left mt-8 flex items-center justify-end">

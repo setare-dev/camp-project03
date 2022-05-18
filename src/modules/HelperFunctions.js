@@ -1,5 +1,6 @@
 import Validator from 'Validator'
 import moment from 'jalali-moment'
+import {messages, fields} from '../config/validation'
 
 /**
  * This is a helper function for validating forms.
@@ -8,12 +9,12 @@ import moment from 'jalali-moment'
  * @param messages Contains error messages for validation.
  * @returns This helper function returns a promise that either returns an error or is true.
  */
-export const  validation = (data, rules, messages) => {
+export const  validation = (data, rules) => {
     return new Promise((resolve, reject) => {
         const v = Validator.make(data, rules, messages)
         if (v.fails()) {
-            const errors = v.getErrors();
-            Object.entries(errors).forEach(([key, value]) => errors[key] = value[0])
+            const errors = v.getErrors()
+            Object.entries(errors).forEach(([key, value]) => errors[key] = value[0].replace(key, fields[key]))
 
             return reject(errors)
         }

@@ -13,8 +13,9 @@ export default createContext({
             month: Number,
             year: Number,
             gender: Boolean,
-            email: String,
             isAdmin: Boolean,
+            email: String,
+            password: String,
             createdAt: String,
         }
     ],
