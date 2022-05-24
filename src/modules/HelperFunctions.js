@@ -1,35 +1,16 @@
-import Validator from 'Validator'
 import moment from 'jalali-moment'
-import {messages, fields} from '../config/validation'
 
 /**
- * This is a helper function for validating forms.
- * @param data Contains information that we need to confirm.
- * @param rules The rules by which we validate the data.
- * @param messages Contains error messages for validation.
- * @returns This helper function returns a promise that either returns an error or is true.
+ * 
+ * @param errors
+ * @returns 
  */
-export const  validation = (data, rules) => {
-    return new Promise((resolve, reject) => {
-        const v = Validator.make(data, rules, messages)
-        if (v.fails()) {
-            const errors = v.getErrors()
-            Object.entries(errors).forEach(([key, value]) => errors[key] = value[0].replace(key, fields[key]))
+export const mapYupErrors = (errors) => {
+    let errorsObj = {}
+    errors = errors.inner.map(err => ({[err.path]: err.message}))
+    errors.reverse().forEach(err => errorsObj = {...errorsObj, ...err})
 
-            return reject(errors)
-        }
-
-        return resolve(true)
-    })
-}
-
-/**
- * This helper returns the time stamp function to the solar date.
- * @param timestamp This is the time stamp parameter.
- * @returns The output is a solar date.
- */
-export const timestampToPersianDate = (timestamp) => {
-    return moment(new Date(timestamp), 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')
+    return errorsObj
 }
 
 /**
@@ -38,8 +19,17 @@ export const timestampToPersianDate = (timestamp) => {
  * @param max This parameter contains the maximum number.
  * @returns The output is an integer.
  */
-export const random = (min, max) => {
+ export const random = (min, max) => {
     min = Math.ceil(min)
     max = Math.floor(max)
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
+
+/**
+ * This helper returns the time stamp function to the solar date.
+ * @param timestamp This is the time stamp parameter.
+ * @returns The output is a solar date.
+ */
+export const timestampToPersianDate = (timestamp) => moment(new Date(timestamp), 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')
+
+export const getCurrentPersianYear = () => moment(new Date(Date.now()), 'YYYY').locale('fa').format('YYYY')

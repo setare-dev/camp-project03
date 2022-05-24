@@ -16,7 +16,7 @@ const DataSetItemSelectUsers = ({userId, isSelect, setIsSelect}) => {
         } else if (!selectedUsers.includes(userId)) {
             setIsSelect(false)
         }   
-    }, [isSelectAll, dispatch, userId, setIsSelect])
+    }, [isSelectAll, dispatch, userId, setIsSelect, selectedUsers])
 
      /**
      * This method is for selecting or not selecting any item.

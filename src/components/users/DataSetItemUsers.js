@@ -5,7 +5,7 @@ import {deleteUser, setModalStatus, setUserIdForUpdate} from '../../states/actio
 import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
 import DataSetRowElement from '../elements/DataSetRowElement'
 import DataSetItemSelectUsers from './DataSetItemSelectUsers'
-import localS from '../../modules/LocalStorage'
+import axiosUsers from '../../axios/users'
 import swal from '../../modules/SwalAlert'
 
 /**
@@ -22,14 +22,17 @@ const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, is
     /**
      * Perform user delete operations.
      */
-    const deleteHandler = async () => {
-        const result = await swal.question()
-        if (result) {
-            setIsDeliting(true)
-            await localS.delete(id)
-            dispatch(deleteUser(id))
+ const deleteHandler = async () => {
+        try {
+            const result = await swal.question()
+            if (result) {
+                setIsDeliting(true)
+                await axiosUsers.delete(`/users/${id}`)
+                dispatch(deleteUser(id))
+                swal.toast('success', SUCCESSFUL_REMOVAL)
+            }
+        } finally {
             setIsDeliting(false)
-            swal.toast('success', SUCCESSFUL_REMOVAL)
         }
     }
 
@@ -47,7 +50,7 @@ const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, is
             <DataSetItemSelectUsers userId={id} isSelect={isSelect} setIsSelect={setIsSelect} />
 
             <DataSetRowElement className="text-lg font-semibold">
-                <div className="ml-1">{gender === '0' ? 'آقای' : 'خانم'}</div>
+                <div className="ml-1">{!gender ? 'آقای' : 'خانم'}</div>
                 <div className="ml-1">{name}</div>
                 <div>{family}</div>
             </DataSetRowElement>
@@ -59,7 +62,7 @@ const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, is
 
             <DataSetRowElement>
                 <div className="ml-1 opacity-60">نوع کاربری</div>
-                <div>{isAdmin === "0" ? 'معمولی' : 'مدیر'}</div>
+                <div>{isAdmin ? 'مدیر' : 'معمولی'}</div>
             </DataSetRowElement>
 
             <DataSetRowElement>

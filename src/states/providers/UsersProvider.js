@@ -2,8 +2,8 @@ import {useEffect, useReducer} from 'react'
 import usersReducer from '../reducers/UsersReducer'
 import UsersContext from '../contexts/users'
 import {setUsers, setIsLoading} from '../actions/users'
-import localS from '../../modules/LocalStorage'
 import FullElementLoading from '../../components/loadings/FullElementLoading'
+import axiosUsers from '../../axios/users'
 
 /**
  * This provider provides user status.
@@ -13,6 +13,7 @@ import FullElementLoading from '../../components/loadings/FullElementLoading'
 const UsersProvider = ({children}) => {
     const [state, dispatch] = useReducer(usersReducer, {
         users: [],
+        pagination: {totalCount: 0, pageSize: 10, currentPage: 1},
         modalStatus: false,
         userIdForUpdate: null,
         filterValue: 'all',
@@ -26,10 +27,9 @@ const UsersProvider = ({children}) => {
      */
     useEffect(() => {
         dispatch(setIsLoading(true))
-        localS.allWithDelay().then(users => {
-            dispatch(setUsers(users))
-            dispatch(setIsLoading(false))
-        })
+        axiosUsers.get('/users?page=1')
+            .then(({data: {data, meta: {totalDocs: totalCount, limit: pageSize, page: currentPage}}}) => dispatch(setUsers(data, {totalCount, pageSize, currentPage})))
+            .finally(() => dispatch(setIsLoading(false)))
     }, [])
 
     return (

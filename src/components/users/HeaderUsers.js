@@ -1,32 +1,37 @@
 import {useContext} from 'react'
 import usersContext from '../../states/contexts/users'
-import {setUsers, setIsLoading, deleteUser, setSelectedUsers, setIsSelectAll} from '../../states/actions/users'
-import dataFactory from '../../modules/DataFactory'
-import localS from '../../modules/LocalStorage'
+import {setUsers, setIsLoading, deleteUser, setSelectedUsers, setIsSelectAll, setModalStatus} from '../../states/actions/users'
+import userFactory from '../../modules/DataFactory/UserFactory'
 import swal from '../../modules/SwalAlert'
+import axiosUsers from '../../axios/users'
 import {SUCCESSFUL_OPERATION, SUCCESSFUL_REMOVAL} from '../../constants/responses'
 
 /**
  * In this component, the management is responsible for opening the user registration form and the switch between the two types of display and registration of fake information, as well as group deletion.
  */
-const HeaderUsers = ({viewType, changeViewType, showModalForCreateForm}) => {
+const HeaderUsers = ({viewType, changeViewType}) => {
 
-    const {state: {selectedUsers}, dispatch} = useContext(usersContext)
+    const {state: {users, selectedUsers, pagination: {totalCount, pageSize, currentPage}}, dispatch} = useContext(usersContext)
+
+    const lastPage = Math.ceil(totalCount / pageSize)
 
     /**
      * Has the task of group deletion of selected users.
      */
     const multiDeleteHandler = async () => {
-        const result = await swal.question()
-        if (result) {
-            dispatch(setIsLoading(true))
-            await deleter()
-            dispatch(setIsLoading(false))
-            setTimeout(() => {
+        try {
+            const result = await swal.question()
+            if (result) {
+                dispatch(setIsLoading(true))
+                await deleter()
+                const {data: {data, meta: {totalDocs, limit, page}}} = await axiosUsers.get(`/users?page=${currentPage < lastPage ? currentPage : selectedUsers.length < users.length ? currentPage : currentPage - 1}`)
+                dispatch(setUsers(data, {totalCount: totalDocs,pageSize: limit,currentPage: page}))
                 dispatch(setSelectedUsers([]))
                 dispatch(setIsSelectAll(false))
-            }, 10)
-            swal.toast('success', SUCCESSFUL_REMOVAL)
+                swal.toast('success', SUCCESSFUL_REMOVAL)
+            }
+        } finally {
+            dispatch(setIsLoading(false))
         }
     }
 
@@ -35,7 +40,7 @@ const HeaderUsers = ({viewType, changeViewType, showModalForCreateForm}) => {
      */
     const deleter = async () => {
         for (const userId of selectedUsers) {
-            await localS.delete(userId, 10)
+            await axiosUsers.delete(`/users/${userId}`)
             dispatch(deleteUser(userId))
         }
     }
@@ -44,13 +49,16 @@ const HeaderUsers = ({viewType, changeViewType, showModalForCreateForm}) => {
      * This function is responsible for creating fake data.
      */
     const dataFactoryHandler = async () => {
-        dispatch(setIsLoading(true))
-        await (new dataFactory()).insert()
-        const users = await localS.allWithDelay()
-        dispatch(setUsers(users))
-        dispatch(setIsLoading(false))
-        window.scrollTo({top: 0, behavior: 'smooth'})
-        swal.toast('success', SUCCESSFUL_OPERATION)
+        try {
+            dispatch(setIsLoading(true))
+            await userFactory.count(20).create()
+            const {data: {data, meta: {totalDocs: totalCount, limit: pageSize, page: currentPage}}} = await axiosUsers.get(`/users?page=1`)
+            dispatch(setUsers(data, {totalCount, pageSize, currentPage}))
+            window.scrollTo({top: 0, behavior: 'smooth'})
+            swal.toast('success', SUCCESSFUL_OPERATION)   
+        } finally {
+            dispatch(setIsLoading(false))
+        }
     }
 
     return (
@@ -61,9 +69,9 @@ const HeaderUsers = ({viewType, changeViewType, showModalForCreateForm}) => {
                 <svg xmlns="http://www.w3.org/2000/svg" onClick={() => changeViewType(false)} className={`${!viewType ? 'text-gray-500 dark:text-gray-100' : 'text-gray-300 dark:text-gray-100/25'} h-7 cursor-pointer`} fill="currentColor" viewBox="0 0 512 512"><path d="M204,240H68a36,36,0,0,1-36-36V68A36,36,0,0,1,68,32H204a36,36,0,0,1,36,36V204A36,36,0,0,1,204,240Z"/><path d="M444,240H308a36,36,0,0,1-36-36V68a36,36,0,0,1,36-36H444a36,36,0,0,1,36,36V204A36,36,0,0,1,444,240Z"/><path d="M204,480H68a36,36,0,0,1-36-36V308a36,36,0,0,1,36-36H204a36,36,0,0,1,36,36V444A36,36,0,0,1,204,480Z"/><path d="M444,480H308a36,36,0,0,1-36-36V308a36,36,0,0,1,36-36H444a36,36,0,0,1,36,36V444A36,36,0,0,1,444,480Z"/></svg>
             </div>
             <div className="block md:flex items-center w-full md:w-auto md:space-x-reverse space-x-0 md:space-x-2">
-                {selectedUsers.length ? <button onClick={multiDeleteHandler} className="my-3 md:my-0 w-full md:w-auto order-1 md:order-2 bg-red-600 hover:bg-red-700 focus:outline-none text-white px-3 py-2 rounded-lg">حذف شوند</button> : null}
-                <button onClick={showModalForCreateForm} className="my-3 md:my-0 w-full md:w-auto order-1 md:order-2 bg-indigo-700 hover:bg-indigo-800 focus:outline-none text-white px-3 py-2 rounded-lg">کاربر جدید</button>
-                <button onClick={dataFactoryHandler} className="my-3 md:my-0 w-full md:w-auto order-1 md:order-2 bg-gray-600 hover:bg-gray-700 focus:outline-none text-white px-3 py-2 rounded-lg">کاربران فیک</button>
+                {selectedUsers.length ? <button onClick={multiDeleteHandler} className="my-3 md:my-0 w-full md:w-auto order-1 md:order-2 bg-red-600 hover:bg-red-700 focus:outline-none text-white px-3 py-[0.70rem] md:py-2 rounded-lg">حذف {selectedUsers.length} کاربر</button> : null}
+                <button onClick={() => dispatch(setModalStatus(true))} className="my-3 md:my-0 w-full md:w-auto order-1 md:order-2 bg-indigo-700 hover:bg-indigo-800 focus:outline-none text-white px-3 py-[0.70rem] md:py-2 rounded-lg">کاربر جدید</button>
+                <button onClick={dataFactoryHandler} className="my-3 md:my-0 w-full md:w-auto order-1 md:order-2 bg-gray-600 hover:bg-gray-700 focus:outline-none text-white px-3 py-[0.70rem] md:py-2 rounded-lg">کاربران فیک</button>
             </div>
         </div>
     )

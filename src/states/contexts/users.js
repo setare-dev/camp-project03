@@ -19,6 +19,11 @@ export default createContext({
             createdAt: String,
         }
     ],
+    pagination: {
+        totalCount: Number,
+        pageSize: Number,
+        currentPage: Number
+    },
     modalStatus: Boolean,
     userIdForUpdate: Number | null,
     filterValue: String,

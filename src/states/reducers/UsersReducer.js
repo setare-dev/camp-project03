@@ -8,7 +8,8 @@ import {
     SET_FILTER_VALUE,
     SET_IS_LOADING,
     SET_SELECTED_USERS,
-    SET_IS_SELECT_ALL
+    SET_IS_SELECT_ALL,
+    SET_PAGINATION
 } from '../constants/user'
 
 /**
@@ -26,6 +27,7 @@ const UsersReducer = (prevState, action) => {
         case SET_IS_LOADING: return setIsLoading(prevState, action)
         case SET_SELECTED_USERS: return setSelectedUsers(prevState, action)
         case SET_IS_SELECT_ALL: return setIsSelectAll(prevState, action)
+        case SET_PAGINATION: return setPagination(prevState, action)
         default: return prevState
     }
 }
@@ -35,7 +37,7 @@ const UsersReducer = (prevState, action) => {
  * @param action Contains payload which is the same as users information array.
  * @returns A new state in which a new user is added.
  */
- const setUsers = (prevState, {payload: {users}}) => ({...prevState, users})
+ const setUsers = (prevState, {payload: {users, pagination}}) => ({...prevState, users, pagination})
 
 /**
  * The task of this method is to add a new user.
@@ -99,7 +101,9 @@ const setIsLoading = (prevState, {payload: {status}}) => ({...prevState, isLoadi
  * @param action Contains the desired user's id.
  * @returns The output of the state is new.
  */
-const setSelectedUsers = (prevState, {payload: {id}}) => ({...prevState, selectedUsers: typeof id !== 'string' ? [] : prevState.selectedUsers.includes(id) ? prevState.selectedUsers.filter(item => item !== id) : [...prevState.selectedUsers, id]})
+const setSelectedUsers = (prevState, {payload: {id}}) => {
+    return {...prevState, selectedUsers: typeof id !== 'number' ? [] : prevState.selectedUsers.includes(id) ? prevState.selectedUsers.filter(item => item !== id) : [...prevState.selectedUsers, id]}
+}
 
 /**
  * This method changes the amount of isSelectAll.
@@ -108,5 +112,7 @@ const setSelectedUsers = (prevState, {payload: {id}}) => ({...prevState, selecte
  * @returns The output of the state is new.
  */
 const setIsSelectAll = (prevState, {payload: {status}}) => ({...prevState, isSelectAll: status})
+
+const setPagination = (prevState, {payload: {value}}) => ({...prevState, pagination: value})
 
 export default UsersReducer

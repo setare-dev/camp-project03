@@ -7,7 +7,8 @@ import {
     SET_FILTER_VALUE, 
     SET_IS_LOADING,
     SET_SELECTED_USERS,
-    SET_IS_SELECT_ALL
+    SET_IS_SELECT_ALL,
+    SET_PAGINATION
 } from '../constants/user'
 
 /**
@@ -15,7 +16,7 @@ import {
  * @param users List of users.
  * @returns Contains action object and user list.
  */
-export const setUsers = users => ({type: SET_USERS, payload: {users}})
+export const setUsers = (users, pagination) => ({type: SET_USERS, payload: {users, pagination}})
 
 /**
  * This action is to register a new user in the state.
@@ -79,3 +80,5 @@ export const setSelectedUsers = id => ({type: SET_SELECTED_USERS, payload: {id}}
  * @returns Contains action object and status isSelectAll.
  */
 export const setIsSelectAll = status => ({type: SET_IS_SELECT_ALL, payload: {status}})
+
+export const setPagination = value => ({type: SET_PAGINATION, payload: {value}})
