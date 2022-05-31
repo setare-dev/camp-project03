@@ -21,6 +21,10 @@ export const fields = {
     gender: 'جنسیت',
     username: 'نام کاربری',
     fullname: 'نام و فامیل',
+    title: 'عنوان',
+    body: 'متن',
+    status: 'وضعیت',
+    description: 'توضیحات'
 }
 
 export const transfer = (rule, field, value = null) => messages[rule].replace(':attr', fields[field]).replace(`:${rule}`, value)

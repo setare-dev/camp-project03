@@ -1,53 +1,16 @@
-import {useState, useContext} from 'react'
-import {timestampToPersianDate} from '../../modules/HelperFunctions'
-import usersContext from '../../states/contexts/users'
-import {deleteUser, setModalStatus, setUserIdForUpdate} from '../../states/actions/users'
-import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
-import DataSetRowElement from '../elements/DataSetRowElement'
-import DataSetItemSelectUsers from './DataSetItemSelectUsers'
-import axiosUsers from '../../axios/users'
-import swal from '../../modules/SwalAlert'
+import useDeleteAndUpdateUsers from '../../hooks/useDeleteAndUpdateUsers'
+import {timestampToPersianDate} from '../../modules/helperFunctions'
+import DataSetRowElement from '../global/elements/dataSetRowElement'
+import SelectItemUsers from './selectItemUsers'
 
-/**
- * The task of this component is to create a record of users in the form of a data set.
- */
 const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
 
-    const {dispatch} = useContext(usersContext)
-
-    const [isDeliting, setIsDeliting] = useState(false)
-
-    const [isSelect, setIsSelect] = useState(false)
-
-    /**
-     * Perform user delete operations.
-     */
- const deleteHandler = async () => {
-        try {
-            const result = await swal.question()
-            if (result) {
-                setIsDeliting(true)
-                await axiosUsers.delete(`/users/${id}`)
-                dispatch(deleteUser(id))
-                swal.toast('success', SUCCESSFUL_REMOVAL)
-            }
-        } finally {
-            setIsDeliting(false)
-        }
-    }
-
-    /**
-     * Perform user editing operations.
-     */
-    const updateHandler = () => {
-        dispatch(setUserIdForUpdate(id))
-        dispatch(setModalStatus(true))
-    }
+    const {isDeliting, isSelect, setIsSelect, deleteHandler, updateHandler} = useDeleteAndUpdateUsers(id)
 
     return (
         <div className={`${isSelect ? 'bg-indigo-100 dark:bg-slate-400/50' : 'bg-gray-200 dark:bg-gray-900'} p-3 rounded-lg space-y-3 relative`}>
             
-            <DataSetItemSelectUsers userId={id} isSelect={isSelect} setIsSelect={setIsSelect} />
+            <SelectItemUsers type="dataset" userId={id} isSelect={isSelect} setIsSelect={setIsSelect} />
 
             <DataSetRowElement className="text-lg font-semibold">
                 <div className="ml-1">{!gender ? 'آقای' : 'خانم'}</div>

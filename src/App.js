@@ -1,27 +1,22 @@
-import UsersProvider from './states/providers/UsersProvider'
-import HeaderLayout from './components/layouts/HeaderLayout'
-import FooterLayout from './components/layouts/FooterLayout'
-import IndexUsers from './components/users/IndexUsers'
-import ScrollTopLayout from './components/layouts/ScrollTopLayout'
+import {lazy, Suspense} from 'react'
+import {Routes, Route, Navigate} from 'react-router-dom'
+import MasterPage from './components/layouts/masterPage'
+import SuspenseLoading from './components/global/loadings/suspenseLoading'
 
-/**
- * The parent component that is supposed to display the user component along with the template components.
- */
+const DashboardPage = lazy(() => import('./pages/dashboardPage'))
+const UsersPage = lazy(() => import('./pages/usersPage'))
+const ArticlesPage = lazy(() => import('./pages/articlesPage'))
+
 const App = () => {
     return (
-        <>
-            <HeaderLayout/>
-
-            <main className="relative" style={{minHeight: 'calc(100vh - 150px)'}}>
-                <UsersProvider>
-                    <IndexUsers />
-                </UsersProvider>
-            </main>
-
-            <ScrollTopLayout />
-
-            <FooterLayout/>
-        </>
+        <MasterPage>
+            <Routes>
+                <Route path="/admin/dashboard" element={<Suspense fallback={<SuspenseLoading />}><DashboardPage /></Suspense>} />
+                <Route path="/admin/users" element={<Suspense fallback={<SuspenseLoading />}><UsersPage /></Suspense>} />
+                <Route path="/admin/articles" element={<Suspense fallback={<SuspenseLoading />}><ArticlesPage /></Suspense>} />
+                <Route path="*" element={<Navigate to="/admin/dashboard" />} />
+            </Routes>
+        </MasterPage>
     )
 }
 

@@ -1,36 +1,34 @@
-import {useContext} from 'react'
-import usersContact from '../../states/contexts/users'
-import {setUsers, setFilterValue, setIsLoading, setIsSelectAll, setSelectedUsers} from '../../states/actions/users'
-import StatisticsRowsUsers from './StatisticsRowsUsers'
-import axiosUsers from '../../axios/users'
+import {useEffect} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import {useSearchParams} from 'react-router-dom'
+import {setUsers} from '../../store/slices/usersSlice'
+import {setFilterValue, setIsLoading, setIsSelectAll, setPagination, setSelectedRows} from '../../store/slices/globalSlice'
+import StatisticsRowsUsers from './statisticsRowsUsers'
+import {getUsersService} from '../../services/usersService'
 
-/**
- * This component is responsible for filtering users.
- */
 const FilterUsers = () => {
 
-    const {dispatch} = useContext(usersContact)
+    const {filterValue} = useSelector(state => state.global)
+
+    const dispatch = useDispatch()
+
+    const [searchParams, setSearchParams] = useSearchParams()
     
-    /**
-     * By changing the filter value, the desired data is captured and stored in the state, as well as the search value is stored in local storage.
-     */
-    const filterUsers = async ({target: {value}}) => {
-        try {
-            dispatch(setIsLoading(true))
-            const query = value === 'all' ? '?' : `?search=${value.split(':')[0]}:${value.split(':')[1]}`
-            const {data: {data, meta: {totalDocs, limit, page}}} = await axiosUsers.get(`/users${query}&page=1`)
-            dispatch(setUsers(data, {totalCount: totalDocs,pageSize: limit,currentPage: page}))
-            dispatch(setFilterValue(value))
+    useEffect(() => {
+        dispatch(setIsLoading(true))
+        const filter = filterValue === 'all' ? '' : filterValue
+        setSearchParams({page: searchParams.get('page') ?? 1, filter: filterValue})
+        getUsersService(searchParams.get('page') ? searchParams.get('page') : 1, filter).then(({data: {data, meta: {totalDocs, limit, page}}}) => {
+            dispatch(setUsers(data))
             dispatch(setIsSelectAll(false))
-            dispatch(setSelectedUsers([]))
-        } finally {
-            dispatch(setIsLoading(false))
-        }
-    }
+            dispatch(setSelectedRows([]))
+            dispatch(setPagination({totalCount: totalDocs, pageSize: limit, currentPage: page}))
+        }).finally(() => dispatch(setIsLoading(false)))
+    }, [filterValue])
 
     return (
         <div className="flex flex-wrap justify-between items-end">
-            <select onChange={filterUsers} className="w-full mb-2 md:w-64 mt-3 p-[.66rem] rounded-lg dark:bg-gray-700 text-gray-700 dark:text-gray-100 border dark:border-0 border-gray-300 focus:ring-2 focus:outline-none">
+            <select value={filterValue} onChange={({target: {value}}) => {dispatch(setFilterValue(value)); setSearchParams()}} className="w-full mb-2 md:w-64 mt-3 p-[.66rem] rounded-lg dark:bg-gray-700 text-gray-700 dark:text-gray-100 border dark:border-0 border-gray-300 focus:ring-2 focus:outline-none">
                 <option value="all">همه</option>
                 <option value="gender:0">مرد</option>
                 <option value="gender:1">زن</option>

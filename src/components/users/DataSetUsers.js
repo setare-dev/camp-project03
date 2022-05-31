@@ -1,9 +1,6 @@
-import DataSetItem from './DataSetItemUsers'
-import {EMPTY_DATA} from '../../constants/responses'
+import DataSetItem from './dataSetItemUsers'
+import {EMPTY_DATA} from '../../constants/responsesConstant'
 
-/**
- * The task of this component is to create a data set from the list of users.
- */
 const DataSetUsers = ({users}) => (
     <div className="my-4">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

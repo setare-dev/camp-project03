@@ -1,66 +1,18 @@
-import {useState, useContext} from 'react'
-import {timestampToPersianDate} from '../../modules/HelperFunctions'
-import usersContext from '../../states/contexts/users'
-import {setUsers, setIsSelectAll, setSelectedUsers, deleteUser, setModalStatus, setUserIdForUpdate, setPagination} from '../../states/actions/users'
-import {SUCCESSFUL_REMOVAL} from '../../constants/responses'
-import TableRowElement from '../elements/TableRowElement'
-import TableDataElement from '../elements/TableDataElement'
-import ButtonElementLoading from '../loadings/ButtonElementLoading'
-import GridViewItemSelectUsers from './GridViewItemSelectUsers'
-import axiosUsers from '../../axios/users'
-import swal from '../../modules/SwalAlert'
+import useDeleteAndUpdateUsers from '../../hooks/useDeleteAndUpdateUsers'
+import {timestampToPersianDate} from '../../modules/helperFunctions'
+import TableRowElement from '../global/elements/tableRowElement'
+import TableDataElement from '../global/elements/tableDataElement'
+import ButtonElementLoading from '../global/loadings/buttonElementLoading'
+import SelectItemUsers from './selectItemUsers'
 
-/**
- * The task of this component is to create a record of users in the form of a data gridview.
- */
 const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
 
-    const {state: {users, pagination: {totalCount, pageSize, currentPage}}, dispatch} = useContext(usersContext)
-
-    const [isDeliting, setIsDeliting] = useState(false)
-
-    const [isSelect, setIsSelect] = useState(false)
-
-    /**
-     * Perform user delete operations.
-     */
-    const deleteHandler = async () => {
-        try {
-            const result = await swal.question()
-            if (result) {
-                setIsDeliting(true)
-                await axiosUsers.delete(`/users/${id}`)
-                dispatch(deleteUser(id))
-                if (users.length > 1) {
-                    dispatch(setPagination({pageSize, currentPage, totalCount: totalCount - 1}))
-                } else {
-                    if (Math.ceil(totalCount / pageSize) > 1) {
-                        const {data: {data, meta: {totalDocs, limit, page}}} = await axiosUsers.get(`/users?page=${currentPage - 1}`)
-                        dispatch(setUsers(data, {totalCount: totalDocs,pageSize: limit,currentPage: page}))
-                        dispatch(setIsSelectAll(false))
-                        dispatch(setSelectedUsers([]))
-                    }
-                }
-                swal.toast('success', SUCCESSFUL_REMOVAL)
-            }
-        } finally {
-            setIsDeliting(false)
-        }
-    }
-
-    /**
-     * Perform user editing operations.
-     */
-    const updateHandler = () => {
-        dispatch(setUserIdForUpdate(id))
-        dispatch(setModalStatus(true))
-        
-    }
+    const {isDeliting, isSelect, setIsSelect, deleteHandler, updateHandler} = useDeleteAndUpdateUsers(id)
 
     return (
         <TableRowElement isSelect={isSelect}>
             <TableDataElement>
-                <GridViewItemSelectUsers userId={id} isSelect={isSelect} setIsSelect={setIsSelect} />
+                <SelectItemUsers type="gridview" userId={id} isSelect={isSelect} setIsSelect={setIsSelect} />
             </TableDataElement>
             <TableDataElement>{name} {family}</TableDataElement>
             <TableDataElement>{year}/{month}/{day}</TableDataElement>

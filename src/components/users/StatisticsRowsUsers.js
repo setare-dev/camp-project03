@@ -1,12 +1,8 @@
-import {useContext} from 'react'
-import usersContact from '../../states/contexts/users'
+import {useSelector} from 'react-redux'
 
-/**
- * Statistics of rows and the number of rows per page and the total number of results
- */
 const StatisticsRowsUsers = () => {
 
-    const {state: {users, pagination: {totalCount, pageSize, currentPage}}} = useContext(usersContact)
+    const {users: {data: users}, global: {pagination: {totalCount, pageSize, currentPage}}} = useSelector(state => state)
 
     const hasNext = currentPage < Math.ceil(totalCount / pageSize)
 
@@ -17,11 +13,11 @@ const StatisticsRowsUsers = () => {
                     ?
                         <div className="text-gray-500 dark:text-gray-300 text-center md:text-right space-x-reverse space-x-1 pt-2">
                             <span>سطر</span>
-                                <span className="font-semibold">{((pageSize * (currentPage - 1)) + 1)}</span>
+                                <span className="font-semibold">{((pageSize * (currentPage - 1)) + 1).toLocaleString('fa-IR')}</span>
                             <span>تا سطر</span>
-                                <span className="font-semibold">{hasNext ? (pageSize * currentPage) : ((pageSize * (currentPage - 1)) + 1) + users.length - 1 }</span>
+                                <span className="font-semibold">{(hasNext ? (pageSize * currentPage) : ((pageSize * (currentPage - 1)) + 1) + users.length - 1).toLocaleString('fa-IR') }</span>
                             <span>از</span>
-                                <span className="font-semibold">{totalCount}</span>
+                                <span className="font-semibold">{totalCount.toLocaleString('fa-IR')}</span>
                             <span>نتیجه</span>
                         </div>
                 : null

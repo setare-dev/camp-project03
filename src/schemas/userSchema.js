@@ -1,10 +1,10 @@
 import {object, string, number, boolean, ref} from 'yup'
-import {getCurrentPersianYear} from '../modules/HelperFunctions'
-import {messages, transfer} from './'
-import axiosUsers from '../axios/users'
+import {getCurrentPersianYear} from '../modules/helperFunctions'
+import {messages, transfer} from '.'
+import {searchUserService} from '../services/usersService'
 
 const {integer, email, confirmed} = messages
-const currentYear = Number(getCurrentPersianYear())
+const currentYear = Number(getCurrentPersianYear('en'))
 
 export const initialData = {
     name: '',
@@ -12,12 +12,12 @@ export const initialData = {
     day: '',
     month: '',
     year: '',
-    gender: false, // false: Male, true: Female
-    isAdmin: false, //false: Normal, true: Admin,
+    gender: 0, // 0: Male, 1: Female
+    isAdmin: 0, //0: Normal, 1: Admin,
     email: '',
     password: '',
     passwordConfirmation: '',
-    createdAt: Date.now()
+    createdAt: ''
 }
 
 export const userSchema = (type = 'create') => { 
@@ -58,10 +58,10 @@ export const userSchema = (type = 'create') => {
                 message: () => transfer('duplicate', 'email'),
                 test: async (email, {parent: {id}}) => {
                     if (type === 'create') {
-                        const {data: {data}} = await axiosUsers.get(`/users?search=email:${email}`)
+                        const {data: {data}} = await searchUserService('email', email)
                         return data.length ? false : true
                     } else {
-                        const {data: {data}} = await axiosUsers.get(`/users?search=email:${email}`)
+                        const {data: {data}} = await searchUserService('email', email)
                         return data.length && data[0].id !== id ? false : true
                     }                
                 }

@@ -17,3 +17,18 @@
     margin: 0;
   }
 }
+
+.ck-editor__editable_inline {
+  min-height: 400px;
+}
+
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline {
+  border-radius: 0 0 0.375rem 0.375rem;
+}
+
+.ck-dark .ck-blurred.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline,
+.ck-dark .ck-focused.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline {
+    background-color: rgb(31 41 55);
+    border-style: none;
+    color: white
+}
