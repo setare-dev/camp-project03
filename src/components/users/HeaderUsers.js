@@ -49,6 +49,7 @@ const HeaderUsers = ({viewType, changeViewType}) => {
             dispatch(setIsLoading(true))
             await userFactory.count(20).create()
             dispatch(setFilterValue('all'))
+            setSearchParams({page: 1, filter: 'all'})
             const {data: {data, meta: {totalDocs, limit, page}}} = await getUsersService()
             dispatch(setUsers(data))
             dispatch(setPagination({totalCount: totalDocs, pageSize: limit, currentPage: page}))

@@ -47,8 +47,9 @@ const HeaderArticles = ({viewType, changeViewType}) => {
     const dataFactoryHandler = async () => {
         try {
             dispatch(setIsLoading(true))
-            await articleFactory.count(120).create()
+            await articleFactory.count(20).create()
             dispatch(setFilterValue('all'))
+            setSearchParams({page: 1, filter: 'all'})
             const {data: {data, meta: {totalDocs, limit, page}}} = await getArticlesService()
             dispatch(setArticles(data))
             dispatch(setPagination({totalCount: totalDocs,pageSize: limit,currentPage: page}))
