@@ -1,8 +1,7 @@
 import {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import useForm from '../../hooks/useForm'
-import {updateUser, setUsers} from '../../store/slices/usersSlice'
-import {setModalStatus, setIdForUpdate, setFilterValue, setPagination} from '../../store/slices/globalSlice'
+import {setUsersArchive, updateUser, setModalStatus, setIdForUpdate, setFilterValue, setPagination, resetUsersState} from '../../store/slices/usersSlice'
 import {initialData, userSchema} from '../../schemas/userSchema'
 import {FORM_ERRORS, AXIOS_ERROR, SUCCESSFUL_OPERATION} from '../../constants/responsesConstant'
 import Modal from '../global/modal/mainModal'
@@ -12,13 +11,13 @@ import swal from '../../modules/sweetAlert'
 import {getUsersService, createUserService, updateUserService} from '../../services/usersService'
 
 /**
- * This component is for managing the user registration form or editing.
+ * This component is for managing the article registration form or editing.
  */
 const FormUsers = () => {
 
     const {data, setData, errors, setErrors, mapYupErrors, isSubmit, setIsSubmit, inputHandler} = useForm(initialData)
 
-    const {users: {data: users}, global: {idForUpdate, modalStatus}} = useSelector(state => state)
+    const {usersCurrentPage, idForUpdate, modalStatus} = useSelector(state => state.users)
 
     const dispatch = useDispatch()
 
@@ -27,7 +26,7 @@ const FormUsers = () => {
      */
     useEffect(() => {
         if (idForUpdate) {
-            setData({...users.filter(({id}) => id === idForUpdate)[0], password: '', passwordConfirmation: ''})
+            setData({...usersCurrentPage.filter(({id}) => id === idForUpdate)[0], password: '', passwordConfirmation: ''})
         }
     }, [idForUpdate])
 
@@ -41,7 +40,7 @@ const FormUsers = () => {
     const submitHandler = async e => {
         try {
             e.preventDefault()
-            setIsSubmit(true)
+            setIsSubmit('form')
             await userSchema(idForUpdate ? 'update' : 'create').validate(data, {abortEarly: false})
             idForUpdate ? await update() : await insert()
             cancelHandler()
@@ -51,7 +50,7 @@ const FormUsers = () => {
             setErrors(mapYupErrors(errors))
             swal.toast('error', FORM_ERRORS)
         } finally {
-            setIsSubmit(false)
+            setIsSubmit('')
         }
     }
 
@@ -61,7 +60,8 @@ const FormUsers = () => {
                 await createUserService({...data, createdAt: Date.now()})
                 dispatch(setFilterValue('all'))
                 const {data: {data: resData, meta: {totalDocs, limit, page}}} = await getUsersService()
-                dispatch(setUsers(resData))
+                dispatch(resetUsersState())
+                dispatch(setUsersArchive({page, data: resData, totalDocs, limit}))
                 dispatch(setPagination({totalCount: totalDocs, pageSize: limit, currentPage: page}))
                 return resolve()
             } catch (err) {
@@ -84,7 +84,7 @@ const FormUsers = () => {
 
     return (
         <Modal modalStatus={modalStatus} cancelHandler={cancelHandler} keyboard>
-            <h4 className="flex items-center text-2xl mb-8 font-semibold text-gray-500 dark:text-gray-100">
+            <h4 className="flex items-center text-2xl mb-8 font-semibold text-gray-500 dark:text-gray-100 select-none">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                 <span>{idForUpdate ? 'ویرایش کاربر' : 'ثبت کاربر'}</span>
             </h4>
@@ -111,8 +111,8 @@ const FormUsers = () => {
                 </MultiColumnElement>
 
                 <div className="text-left mt-8 flex items-center justify-end">
-                    <ButtonElementLoading text={idForUpdate ? 'ویرایش' : 'ثبت'} isSubmit={isSubmit} size="md" className={`${isSubmit ? 'opacity-60' : 'opacity-1'} bg-green-700 hover:bg-green-800 focus:bg-green-800`} />
-                    <button disabled={isSubmit ? 'disabled' : ''} onClick={cancelHandler} type="button" className={`${isSubmit ? 'opacity-60' : 'opacity-1'} rounded-md px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:w-auto focus:bg-red-800`}>انصراف</button>
+                    <ButtonElementLoading text={idForUpdate ? 'ویرایش' : 'ثبت'} isSubmit={isSubmit} className={`${isSubmit ? 'opacity-60' : 'opacity-1'} bg-green-700 hover:bg-green-800 focus:bg-green-800 duration-300`} />
+                    <button disabled={isSubmit ? 'disabled' : ''} onClick={cancelHandler} type="button" className={`${isSubmit ? 'opacity-60' : 'opacity-1'} rounded-md px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:w-auto focus:bg-red-800 duration-300`}>انصراف</button>
                 </div>
             </form>
         </Modal>

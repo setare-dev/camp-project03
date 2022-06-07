@@ -7,8 +7,6 @@ class ArticleFactory extends Factory {
 
     $axios = createArticleService
 
-    $route = '/articles'
-
     defination () {
         const sentences = faker.lorem.sentences(1)
         return {

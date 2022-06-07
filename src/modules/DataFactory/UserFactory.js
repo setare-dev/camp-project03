@@ -6,8 +6,6 @@ class UserFactory extends Factory {
 
     $axios = createUserService
 
-    $route = '/users'
-
     defination () {
         const gender = faker.datatype.number({min: 0, max: 1})
         return {

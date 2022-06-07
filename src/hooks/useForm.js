@@ -6,7 +6,7 @@ const UseForm = (initialData) => {
 
     const [errors, setErrors] = useState({})
 
-    const [isSubmit, setIsSubmit] = useState(false)
+    const [isSubmit, setIsSubmit] = useState('')
 
     const inputHandler = (key, value, type = 'string') => setData({...data, [key]: type === 'number' ? Number(value) : value})
 

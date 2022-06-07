@@ -2,10 +2,11 @@ import useDeleteAndUpdateArticles from '../../hooks/useDeleteAndUpdateArticles'
 import {timestampToPersianDate} from '../../modules/helperFunctions'
 import DataSetRowElement from '../global/elements/dataSetRowElement'
 import SelectItemArticles from './selectItemArticles'
+import ButtonElementLoading from '../global/loadings/buttonElementLoading'
 
 const DataSetItemArticles = ({id, title, description, status, createdAt}) => {
 
-    const {isDeliting, isSelect, setIsSelect, deleteHandler, updateHandler} = useDeleteAndUpdateArticles(id)
+    const {isSelect, setIsSelect, getIsSubmit, deleteHandler, updateHandler} = useDeleteAndUpdateArticles(id)
 
     return (
         <div className={`${isSelect ? 'bg-indigo-100 dark:bg-slate-400/50' : 'bg-gray-200 dark:bg-gray-900'} p-3 rounded-lg space-y-3 relative`}>
@@ -13,11 +14,11 @@ const DataSetItemArticles = ({id, title, description, status, createdAt}) => {
             <SelectItemArticles type="dataset" articleId={id} isSelect={isSelect} setIsSelect={setIsSelect} />
 
             <DataSetRowElement>
-                <div>{title.length > 30 ? title.slice(0, 30) + '...' : title}</div>
+                <div className="font-bold">{title.length > 30 ? title.slice(0, 30) + '...' : title}</div>
             </DataSetRowElement>
 
             <DataSetRowElement>
-                <div className="min-h-24">{description}</div>
+                <div className="h-24 break-all">{description}</div>
             </DataSetRowElement>
 
             <DataSetRowElement>
@@ -31,14 +32,10 @@ const DataSetItemArticles = ({id, title, description, status, createdAt}) => {
             </DataSetRowElement>
 
             <div className="grid grid-cols-2">
-                <button disabled={isDeliting ? 'disabled' : ''} onClick={updateHandler} className={`${isDeliting ? 'opacity-60' : 'opacity-1'} bg-green-700 text-white p-2 text-sm rounded-r-md hover:bg-green-800 focus:outline-none`}>ویرایش</button>
-                <button onClick={deleteHandler} disabled={isDeliting ? 'disabled' : ''} className={`${isDeliting ? 'opacity-60' : 'opacity-1'} bg-red-600 text-white p-2 text-sm rounded-l-md hover:bg-red-700 focus:outline-none`}>
-                    <div className="flex items-center justify-center">
-                        {isDeliting ? <span className="relative flex w-3 h-3 ml-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-100 opacity-75"></span><span className="relative inline-flex rounded-full bg-white h-3 w-3"></span></span> : null}
-                        <span>حذف</span>
-                    </div>
-                </button>
+                <ButtonElementLoading onClick={updateHandler} text="ویرایش" isSubmit={getIsSubmit()} size="sm" className={`${getIsSubmit() !== '' ? 'opacity-60' : 'opacity-1'} bg-green-700 text-white p-1 ml-2 text-sm rounded-md show hover:bg-green-800 focus:bg-green-800 duration-300`} />
+                <ButtonElementLoading size="md" onClick={deleteHandler} text="حذف" isSubmit={getIsSubmit('delete')} className="bg-red-600 hover:bg-red-700 focus:bg-red-700 duration-300" />
             </div>
+
         </div>
     )
 }

@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {setUsers} from '../store/slices/usersSlice'
-import {setIsLoading, setIsSelectAll, setSelectedRows, setPagination} from '../store/slices/globalSlice'
+import {useSearchParams} from 'react-router-dom'
+import {setUsersArchive, setUsersCurrentPage, setSelectedRows} from '../store/slices/usersSlice'
+import {setIsLoading} from '../store/slices/globalSlice'
 import HeaderUsers from '../components/users/headerUsers'
 import ModalFormUsers from '../components/users/formUsers'
 import GridViewUsers from '../components/users/gridViewUsers'
@@ -12,36 +13,41 @@ import {getUsersService} from '../services/usersService'
 
 const UsersPage = () => {
 
-    const {users: {data: users}, global: {filterValue, pagination: {totalCount, pageSize, currentPage}}} = useSelector(state => state)
+    const {usersArchive, filterValue, pagination: {totalCount, pageSize, currentPage}} = useSelector(state => state.users)
 
     const dispatch = useDispatch()
 
-    /*
-     * true: GridView, false: DataSet
-     */
+    const [searchParams, setSearchParams] = useSearchParams()
+
     const [viewType, setViewType] = useState(localStorage.viewType ? localStorage.viewType !== 'false' : true)
 
     useEffect(() => {
         document.title = 'کاربران'
+        const page = searchParams.get('page') ? Number(searchParams.get('page')) : currentPage
+        setSearchParams({page, filter: filterValue})
+        pageChangeHandler(page)
     }, [])
     
     const changeViewType = type => {
         setViewType(type)
+        dispatch(setSelectedRows([]))
         localStorage.viewType = type
     }
 
     const pageChangeHandler = async (page) => {
-        try {
-            dispatch(setIsLoading(true))
-            const filter = filterValue === 'all' ? '' : `${filterValue.split(':')[0]}:${filterValue.split(':')[1] === '1' ? 'true' : 'false' }`
-            const {data: {data, meta: {totalDocs, limit}}} = await getUsersService(page, filter)
-            dispatch(setUsers(data))
-            dispatch(setIsSelectAll(false))
-            dispatch(setSelectedRows([]))
-            dispatch(setPagination({totalCount: totalDocs, pageSize: limit, currentPage: page}))
+        if (!usersArchive.filter(item => item.page === page).length) {
+            try {
+                dispatch(setIsLoading(true))
+                const filter = searchParams.get('filter') ? searchParams.get('filter') : filterValue
+                const {data: {data, meta: {totalDocs, limit}}} = await getUsersService(page, filter === 'all' || filter === 'status:all' ? null : filter)
+                dispatch(setUsersArchive({page, data, totalDocs, limit}))
+                window.scrollTo({top: 0, behavior: 'smooth'})
+            } finally {
+                dispatch(setIsLoading(false))
+            }
+        } else {
+            dispatch(setUsersCurrentPage(page))
             window.scrollTo({top: 0, behavior: 'smooth'})
-        } finally {
-            dispatch(setIsLoading(false))
         }
     }
 
@@ -52,9 +58,9 @@ const UsersPage = () => {
 
             <FilterUsers />
 
-            {viewType ? <GridViewUsers users={users} /> : <DataSetUsers users={users} />}
+            {viewType ? <GridViewUsers /> : <DataSetUsers />}
 
-            <Pagination filter={filterValue} onPageChange={page => pageChangeHandler(page)} currentPage={currentPage} totalCount={totalCount} pageSize={pageSize} />
+            <Pagination onPageChange={page => pageChangeHandler(page)} currentPage={currentPage} totalCount={totalCount} pageSize={pageSize} filter={searchParams.get('filter')} />
 
             <ModalFormUsers />
             

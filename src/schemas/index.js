@@ -24,7 +24,8 @@ export const fields = {
     title: 'عنوان',
     body: 'متن',
     status: 'وضعیت',
-    description: 'توضیحات'
+    description: 'توضیحات',
+    text: 'متن'
 }
 
 export const transfer = (rule, field, value = null) => messages[rule].replace(':attr', fields[field]).replace(`:${rule}`, value)

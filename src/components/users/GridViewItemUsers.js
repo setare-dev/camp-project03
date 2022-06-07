@@ -7,7 +7,7 @@ import SelectItemUsers from './selectItemUsers'
 
 const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
 
-    const {isDeliting, isSelect, setIsSelect, deleteHandler, updateHandler} = useDeleteAndUpdateUsers(id)
+    const {isSelect, setIsSelect, getIsSubmit, deleteHandler, updateHandler} = useDeleteAndUpdateUsers(id)
 
     return (
         <TableRowElement isSelect={isSelect}>
@@ -21,10 +21,8 @@ const GridViewItemUsers = ({id, name, family, day, month, year, gender, email, i
             <TableDataElement>{isAdmin ? 'مدیر' : 'معمولی'}</TableDataElement>
             <TableDataElement>{timestampToPersianDate(createdAt)}</TableDataElement>
             <TableDataElement>
-                <div className="flex items-center mx-auto" style={{width: 100}}>
-                    <button disabled={isDeliting ? 'disabled' : ''} onClick={updateHandler} className={`${isDeliting ? 'opacity-60' : 'opacity-1'} bg-green-700 text-white p-1 ml-2 text-sm rounded-md show hover:bg-green-800 focus:outline-none`}>ویرایش</button>
-                    <ButtonElementLoading onClick={deleteHandler} text="حذف" isSubmit={isDeliting} size="sm" className="bg-red-600 hover:bg-red-700 focus:bg-red-700" />
-                </div>
+                <ButtonElementLoading onClick={updateHandler} text="ویرایش" isSubmit={getIsSubmit()} size="sm" className={`${getIsSubmit() !== '' ? 'opacity-60' : 'opacity-1'} bg-green-700 text-white p-1 ml-2 text-sm rounded-md show hover:bg-green-800 focus:bg-green-800 duration-300`} />
+                <ButtonElementLoading onClick={deleteHandler} text="حذف" isSubmit={getIsSubmit('delete')} size="sm" className="bg-red-600 hover:bg-red-700 focus:bg-red-700 duration-300" />
             </TableDataElement>
         </TableRowElement>
     )

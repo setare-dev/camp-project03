@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {NavLink} from 'react-router-dom'
-import {resetGlobalState} from '../../../store/slices/globalSlice'
+import {setIsShowSidebar} from '../../../store/slices/globalSlice'
 
 const SidebarLayout = () => {
 
@@ -16,12 +16,14 @@ const SidebarLayout = () => {
     }, [isShowSidebar])
 
     const setClasses = (isActive) => {
-        let classes = 'flex items-center w-full space-x-reverse space-x-2 rounded p-2 text-gray-500 dark:text-gray-100'
-        classes += isActive ? ' bg-indigo-700 dark:bg-gray-700 !text-white' : ''
+        let classes = 'flex items-center w-full space-x-reverse space-x-2 rounded p-2 text-gray-500 dark:text-gray-100 hover:bg-gray-300/40 hover:dark:bg-gray-800 transition-colors duration-300 select-none focus:outline-none'
+        classes += isActive ? ' !bg-indigo-700 !dark:bg-gray-700 !text-white' : ''
         return classes
     }
 
-    const closeSidebarHandler = () => window.matchMedia('only screen and (max-width: 1024px)').matches ? dispatch(resetGlobalState({isShowSidebar: false})) : dispatch(resetGlobalState())
+    const closeSidebarHandler = () => {
+        if (window.matchMedia('only screen and (max-width: 1024px)').matches) dispatch(setIsShowSidebar(false))
+    }
 
     return (
         <aside ref={sidebarRef} className="w-[18rem] h-full fixed top-[60px] -mr-[300px] duration-500 z-[999] bg-gray-200 dark:bg-gray-900 text-white flex flex-column justify-between">
@@ -37,8 +39,13 @@ const SidebarLayout = () => {
                 </NavLink>
 
                 <NavLink onClick={closeSidebarHandler} to="/admin/articles" className={({isActive}) => setClasses(isActive)}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" /><path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" /><path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" /></svg>
                     <span>مقالات</span>
+                </NavLink>
+
+                <NavLink onClick={closeSidebarHandler} to="/admin/todos" className={({isActive}) => setClasses(isActive)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                    <span>کارها</span>
                 </NavLink>
             </div>
         </aside>

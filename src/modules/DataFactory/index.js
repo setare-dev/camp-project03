@@ -9,8 +9,6 @@ class DataFactory {
 
     $axios = ''
 
-    $route = ''
-
     $count = 10
 
     /**
@@ -43,11 +41,6 @@ class DataFactory {
 
     axios (value) {
         this.$axios = value
-        return this
-    }
-
-    route (value) {
-        this.$route = value
         return this
     }
 

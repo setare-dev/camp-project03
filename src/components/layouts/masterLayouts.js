@@ -16,10 +16,6 @@ const MasterPage = ({children}) => {
 
     const backDarkRef = useRef(null)
 
-    const matchBreakPoint = () => window.matchMedia('only screen and (max-width: 1024px)').matches
-    
-    const isShowSidebarHandler = () => matchBreakPoint() ? dispatch(setIsShowSidebar(false)) : dispatch(setIsShowSidebar(true))
-
     useEffect(() => {
         isShowSidebarHandler()
         window.addEventListener('resize', () => isShowSidebarHandler())
@@ -32,7 +28,6 @@ const MasterPage = ({children}) => {
             backDarkRef.current.classList.add('block')
             backDarkRef.current.classList.remove('hidden')
             matchBreakPoint() ? document.querySelector('body').classList.add('overflow-hidden') : document.querySelector('body').classList.remove('overflow-hidden')
-                
         } else {
             backDarkRef.current.classList.add('hidden')
             backDarkRef.current.classList.remove('black')
@@ -40,12 +35,23 @@ const MasterPage = ({children}) => {
         }
     }, [isShowSidebar])
 
+    const matchBreakPoint = () => window.matchMedia('only screen and (max-width: 1024px)').matches
+    
+    const isShowSidebarHandler = () => {
+        if (matchBreakPoint()) {
+            dispatch(setIsShowSidebar(false))
+        } else {
+            dispatch(setIsShowSidebar(true))
+            document.querySelector('body').classList.remove('overflow-hidden')
+        }
+    }
+
     return (
-        <div className="animate-slow-1000">
+        <div className="animate-slow-1000 select-none">
 
             <SidebarLayout />
 
-            <div ref={backDarkRef} onClick={() => dispatch(setIsShowSidebar(false))} className="fixed inset-0 z-10 bg-gray-900/50 lg:hidden"></div>
+            <div ref={backDarkRef} onClick={() => dispatch(setIsShowSidebar(false))} className="fixed inset-0 z-10 bg-gray-500/50 dark:bg-gray-900/50 lg:hidden"></div>
 
             <div ref={workSpaceRef} className="relative duration-500">
                 

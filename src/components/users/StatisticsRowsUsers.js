@@ -1,8 +1,8 @@
 import {useSelector} from 'react-redux'
 
-const StatisticsRowsUsers = () => {
+const StatisticsRowsUsers = () => { 
 
-    const {users: {data: users}, global: {pagination: {totalCount, pageSize, currentPage}}} = useSelector(state => state)
+    const {usersCurrentPage: users, pagination: {totalCount, pageSize, currentPage}} = useSelector(state => state.users)
 
     const hasNext = currentPage < Math.ceil(totalCount / pageSize)
 

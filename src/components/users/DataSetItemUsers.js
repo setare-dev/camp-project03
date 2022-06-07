@@ -2,10 +2,11 @@ import useDeleteAndUpdateUsers from '../../hooks/useDeleteAndUpdateUsers'
 import {timestampToPersianDate} from '../../modules/helperFunctions'
 import DataSetRowElement from '../global/elements/dataSetRowElement'
 import SelectItemUsers from './selectItemUsers'
+import ButtonElementLoading from '../global/loadings/buttonElementLoading' 
 
 const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, isAdmin, createdAt}) => {
 
-    const {isDeliting, isSelect, setIsSelect, deleteHandler, updateHandler} = useDeleteAndUpdateUsers(id)
+    const {isSelect, setIsSelect, getIsSubmit, deleteHandler, updateHandler} = useDeleteAndUpdateUsers(id)
 
     return (
         <div className={`${isSelect ? 'bg-indigo-100 dark:bg-slate-400/50' : 'bg-gray-200 dark:bg-gray-900'} p-3 rounded-lg space-y-3 relative`}>
@@ -38,21 +39,10 @@ const DataSetItemUsers = ({id, name, family, day, month, year, gender, email, is
             </DataSetRowElement>
 
             <div className="grid grid-cols-2">
-                <button disabled={isDeliting ? 'disabled' : ''} onClick={updateHandler} className={`${isDeliting ? 'opacity-60' : 'opacity-1'} bg-green-700 text-white p-2 text-sm rounded-r-md hover:bg-green-800 focus:outline-none`}>ویرایش</button>
-                <button onClick={deleteHandler} disabled={isDeliting ? 'disabled' : ''} className={`${isDeliting ? 'opacity-60' : 'opacity-1'} bg-red-600 text-white p-2 text-sm rounded-l-md hover:bg-red-700 focus:outline-none`}>
-                    <div className="flex items-center justify-center">
-                        {
-                            isDeliting ?
-                                <span className="relative flex w-3 h-3 ml-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-100 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full bg-white h-3 w-3"></span>
-                                </span>
-                            : null
-                        }
-                        <span>حذف</span>
-                    </div>
-                </button>
+                <ButtonElementLoading onClick={updateHandler} text="ویرایش" isSubmit={getIsSubmit()} size="sm" className={`${getIsSubmit() !== '' ? 'opacity-60' : 'opacity-1'} bg-green-700 text-white p-1 ml-2 text-sm rounded-md show hover:bg-green-800 focus:bg-green-800 duration-300`} />
+                <ButtonElementLoading size="md" onClick={deleteHandler} text="حذف" isSubmit={getIsSubmit('delete')} className="bg-red-600 hover:bg-red-700 focus:bg-red-700 duration-300" />
             </div>
+
         </div>
     )
 }

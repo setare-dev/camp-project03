@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {setArticles} from '../store/slices/articlesSlice'
-import {setIsLoading, setIsSelectAll, setSelectedRows, setPagination, setFilterValue} from '../store/slices/globalSlice'
+import {useSearchParams} from 'react-router-dom'
+import {setArticlesArchive, setArticlesCurrentPage, setSelectedRows} from '../store/slices/articlesSlice'
+import {setIsLoading} from '../store/slices/globalSlice'
 import HeaderArticles from '../components/articles/headerArticles'
 import ModalFormArticles from '../components/articles/formArticles'
 import GridViewArticles from '../components/articles/gridViewArticles'
@@ -12,36 +13,41 @@ import {getArticlesService} from '../services/articlesService'
 
 const ArticlesPage = () => {
 
-    const {articles: {data: articles}, global: {filterValue, pagination: {totalCount, pageSize, currentPage}}} = useSelector(state => state)
+    const {articlesArchive, filterValue, pagination: {totalCount, pageSize, currentPage}} = useSelector(state => state.articles)
 
     const dispatch = useDispatch()
 
-    /*
-     * true: GridView, false: DataSet
-     */
+    const [searchParams, setSearchParams] = useSearchParams()
+
     const [viewType, setViewType] = useState(localStorage.viewType ? localStorage.viewType !== 'false' : true)
 
     useEffect(() => {
         document.title = 'مقالات'
+        const page = searchParams.get('page') ? Number(searchParams.get('page')) : currentPage
+        setSearchParams({page, filter: filterValue})
+        pageChangeHandler(page)
     }, [])
     
     const changeViewType = type => {
         setViewType(type)
+        dispatch(setSelectedRows([]))
         localStorage.viewType = type
     }
 
     const pageChangeHandler = async (page) => {
-        try {
-            dispatch(setIsLoading(true))
-            const filter = filterValue === 'all' ? '' : `status:${filterValue}`
-            const {data: {data, meta: {totalDocs, limit}}} = await getArticlesService(page, filter)
-            dispatch(setArticles(data))
-            dispatch(setIsSelectAll(false))
-            dispatch(setSelectedRows([]))
-            dispatch(setPagination({totalCount: totalDocs, pageSize: limit, currentPage: page}))
+        if (!articlesArchive.filter(item => item.page === page).length) {
+            try {
+                dispatch(setIsLoading(true))
+                const filter = searchParams.get('filter') ? searchParams.get('filter') : filterValue
+                const {data: {data, meta: {totalDocs, limit}}} = await getArticlesService(page, filter === 'all' || filter === 'status:all' ? null : filter)
+                dispatch(setArticlesArchive({page, data, totalDocs, limit}))
+                window.scrollTo({top: 0, behavior: 'smooth'})
+            } finally {
+                dispatch(setIsLoading(false))
+            }
+        } else {
+            dispatch(setArticlesCurrentPage(page))
             window.scrollTo({top: 0, behavior: 'smooth'})
-        } finally {
-            dispatch(setIsLoading(false))
         }
     }
 
@@ -52,9 +58,9 @@ const ArticlesPage = () => {
 
             <FilterArticles />
 
-            {viewType ? <GridViewArticles articles={articles} /> : <DataSetArticles articles={articles} />}
+            {viewType ? <GridViewArticles /> : <DataSetArticles />}
 
-            <Pagination filter={filterValue} onPageChange={page => pageChangeHandler(page)} currentPage={currentPage} totalCount={totalCount} pageSize={pageSize} />
+            <Pagination onPageChange={page => pageChangeHandler(page)} currentPage={currentPage} totalCount={totalCount} pageSize={pageSize} filter={searchParams.get('filter')} />
 
             <ModalFormArticles />
             
